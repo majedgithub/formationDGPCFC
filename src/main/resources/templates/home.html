@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+  layout:decorate="~{template1}">
+<head>
+<meta charset="utf-8">
+<title>Votre BAnque</title>
+</head>
+<body>
+	<div layout:fragment="content">
+			<div class="mainpanel">
+		         <div class="contentpanel">
+		                        
+		            <div class="row row-stat">          
+		                    	<div class="col-md-1" ></div>	                        
+							   <div class="col-md-7" >
+							
+								   	<div  class="panel panel-primary">
+								   		<div class="panel-heading">Liste des actions</div>
+								   		<div class="panel-body">
+								   			<table class="table table-striped">
+								   				<tr>
+								   					<th>cnrps</th>
+								   					<th>nom</th>
+								   					<th>direction</th>
+								   					<th>grade</th>
+								   					<th>fonction</th>
+								   					<th width="20%"></th>
+								   				</tr>
+								   				<tr th:each="o:${listeActions}">
+								   				 	<td th:text="${o.id}"></td>
+								   				 	<td th:text="${o.intitule}"></td>
+								   				 	<td th:text="${o.dateaction}"></td>
+								   				 	<td th:text="${o.duree}"></td>
+								   				 	<td th:text="${o.lieu}"></td>
+								   				 	<td><a class="btn btn-info" th:href="@{/consulterAction(idac = ${o.id})}">view</a>
+								   				 	<a class="btn btn-success" th:href="@{/consulterAction(idac = ${o.id})}">edit</a></td>
+								   				</tr>
+								   			</table>
+								   				<div class="container">
+									   				<ul class="nav nav-pills">
+									   					<li th:each="p,status:${pages}" >
+									   					<a th:href="@{/home(page=${status.index})}" th:text="${status.index}"></a>
+									   					
+									   					</li>
+									   				</ul>
+									   			
+									   			</div>
+								   		</div>
+								   	</div>
+							   
+							   </div>
+								    <div class="col-md-3">      
+								                
+		                            <div class="row">
+		                                <div class="panel panel-default">
+		                                    <div class="panel-heading">
+		                                        <div class="panel-btns">
+		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+		                                        </div><!-- panel-btns -->
+		                                        <div class="panel-icon"><i class="fa fa-home"></i></div>
+		                                        <div class="media-body">
+		                                            <h5 class="md-title nomargin">Les employes</h5>
+		                                            <hr>
+		                                            <h1 class="mt5" th:text="${sizeemployes}"></h1>
+		                                        </div><!-- media-body -->
+		                                        
+		                                    
+		                                        
+		                                    </div><!-- panel-body -->
+		                                </div><!-- panel -->
+		                            </div><!-- col-md-4 -->
+		                            
+		                           <div class="row">
+		                                <div class="panel panel-primary noborder">
+		                                    <div class="panel-heading noborder">
+		                                        <div class="panel-btns">
+		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+		                                        </div><!-- panel-btns -->
+												
+		                                        <div class="panel-icon"><i class="fa fa-apple"></i></div>
+		                                        <div class="media-body">
+		                                            <h5 class="md-title nomargin">Les actions internes</h5>
+		                                             <hr>
+		                                            <h1 class="mt5" th:text="${siz}"> actions</h1>
+		                                        </div><!-- media-body -->
+		                                       
+		                                        
+		                                    </div><!-- panel-body -->
+		                                </div><!-- panel -->
+		                            </div><!-- col-md-4 -->
+		                            
+		                            <div class="row">
+		                                <div class="panel panel-success">
+		                                    <div class="panel-heading noborder">
+		                                        <div class="panel-btns">
+		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" data-placement="left" title="Close Panel"><i class="fa fa-times"></i></a>
+		                                        </div><!-- panel-btns -->
+		                                        <div class="panel-icon"><i class="fa fa-pencil"></i></div>
+		                                        <div class="media-body">
+		                                            <h5 class="md-title nomargin">Les actions extérieurs</h5>
+		                                             <hr>
+		                                            <h1 class="mt5">153,900</h1>
+		                                        </div><!-- media-body -->
+		                                       
+		                                    </div><!-- panel-body -->
+		                                </div><!-- panel -->
+		                            </div><!-- col-md-4 -->
+		                            </div>
+		                            </div> 
+		                        </div><!-- row -->
+	
+		                    </div><!-- contentpanel -->
+		                    
+		                </div><!-- mainpanel -->
+	
+</div>
+</body>
+</html>

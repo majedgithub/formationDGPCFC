@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+  layout:decorate="~{template1}">
+<head>
+<meta charset="utf-8">
+<title>Votre BAnque</title>
+</head>
+<body>
+	<div layout:fragment="content">
+			<div class="mainpanel">
+		         <div class="contentpanel">
+		                        
+		            <div class="row row-stat">          
+		                    	<div class="col-md-1" ></div>	                        
+								   <div class="col-md-10" >
+								
+									   	<div  class="panel panel-primary">
+									   		<div class="panel-heading">Détails action</div>
+									   		<div class="panel-body">
+									   			<div class="jumbotron">
+											      	<div class="form-label-group">
+											      	<div class="row">
+											      	<div class="col-md-5">
+											      		 <label for="inputid" class="label label-danger">identifiant</label>
+											      		 <label class="form-control" th:text="${action.id}">12</label><br>
+											      		 	
+														<label class="label label-success">intitulé</label>
+														<label class="form-control" th:text="${action.intitule}"></label>
+														
+														<label for="inputtheme" class="label label-success">Théme</label>
+														<label class="form-control" th:text="${action.intitule}"></label>
+														
+														<label for="inputdate" class="label label-success">date action</label>
+														<label class="form-control" th:text="${action.dateaction}"></label>														
+														
+														<label for="inputduree" class="label label-success">durée</label>
+														<label class="form-control" th:text="${action.duree}"></label>
+														
+														<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
+														<label class="form-control" th:text="${action.sousparag}"></label>
+															
+														<label for="inputavis" class="label label-success">Avis</label>
+														<label class="form-control" th:text="${action.avis}"></label>	      		
+											      	</div>
+											      											      	
+											      	<div class="col-md-1"></div>
+											      	<div class="col-md-5">
+											      	<label for="inputlieu" class="label label-success">Lieu</label>
+											      		<label class="form-control" th:text="${action.lieu}"></label>	
+														
+														<div class="panel panel-danger">
+															<h3><label class="label label-primary">cout dépence:</label></h3>
+															<div class="row">
+																<div class="col-md-4">
+																<label for="inputorgc">organisation</label>
+																<label class="form-control" th:text="${action.organisationc}"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputanc">animation</label>
+																<label class="form-control" th:text="${action.animationc}"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputtotalcop">total</label>
+																<label class="form-control" th:text="${action.totalec}"></label>
+																</div>
+															</div>
+														</div>
+													
+														<label for="inputavis" class="label label-success">Etat</label>
+														<label class="form-control" th:text="${action.etat}"></label>	
+														
+														
+														
+														<label for="inputavis" class="label label-success">Formateur</label>
+														<label class="form-control" th:text="${action.formateur.nom + ' (bureau : ' + action.formateur.bureau + ')'}"></label>	
+														
+														
+														<div class="panel panel-danger">
+															<h3><label class="label label-primary">cout copération:</label></h3>
+															<div class="row">
+																<div class="col-md-4">
+																<label for="inputid">organisation</label>
+																<label class="form-control" th:text="${action.organisationcop}"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputid">animation</label>
+																<label class="form-control" th:text="${action.animationcop}"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputid">total</label>
+																<label class="form-control" th:text="${action.totalecop}"></label>
+																</div>
+															</div>
+														</div>
+														      		
+											      	</div>
+											      	</div>
+												        
+												      </div>
+											      
+											      </div>
+											      
+									   			<h3>Liste des participants <a class="btn btn-primary" th:href="@{/Attestation(ac = ${action.id}, op = 'G')}">Générer attestation de présence</a></h3> 
+									   			
+									   			<table class="table table-striped">
+									   				<tr>
+									   					<th>Identifiant</th>
+									   					<th>Nom</th>
+									   					<th>Direction</th>
+									   					<th>Grade</th>
+									   					<th>Fonction</th>
+									   					<th></th>
+									   				</tr>
+									   				<tr th:each="o:${emps}">
+									   				 	 	<td th:text="${o.cnrps}"></td>
+										   				 	<td th:text="${o.nom}"></td>
+										   				 	<td th:text="${o.direction.libelleFr}"></td>
+										   				 	<td th:text="${o.grade.libelleFr}"></td>
+										   				 	<td th:text="${o.fonctions.libelleFr}"></td>
+										   				 	<td><a class="btn btn-info" th:href="@{/Attestation(ac = ${action.id},emp = ${o.id}, op = 'E')}">Générer attestation</a>
+										   				 	</td>
+								   				 	</tr>
+									   			</table>
+									   			
+									   		</div>
+									   	</div>
+								   
+								   </div>
+								   <div class="col-md-1" ></div>	  
+								   
+		                    </div> 
+	
+		                    </div><!-- contentpanel -->
+		                    
+		                </div><!-- mainpanel -->
+	
+</div>
+</body>
+</html>

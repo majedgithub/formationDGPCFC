@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+  layout:decorate="~{template1}">
+<head>
+<meta charset="utf-8">
+<title>Ajouter action</title>
+</head>
+<body>
+	<div layout:fragment="content">
+			<div class="mainpanel">
+		         <div class="contentpanel">
+		                        
+		            <div class="row row-stat">          
+		                    	<div class="col-md-1" ></div>	                        
+								   <div class="col-md-10" >
+								
+									   	<div  class="panel panel-primary">
+									   		<div class="panel-heading">Ajouter action</div>
+									   		<div class="panel-body">
+									   		<div class="row">
+									   		<div class="col-md-8">
+									   		<form th:action="@{/actionadd}" method="get">
+									   		<label for="nombreutilisateur" class="label label-danger">Nombre participants</label>
+											<input class="form-control" name="nombreutilisateur" type="text" placeholder="participants" required>
+											 <input type="submit" value="envoye" class="btn btn-primary"> 		 
+									   		</form>
+									   		</div>
+									   		</div>
+									   			<div class="jumbotron">
+											      	<div class="form-label-group">
+											      	<div class="row">
+											      	<div class="col-md-5">
+											      		 <label for="inputid" class="label label-success">Intitulé</label>
+											      		 <input class="form-control" name="intitule" type="text" placeholder="Intitulé de l'action" required><br>
+											      		 	
+														<label class="label label-success">intitulé</label>
+											      		 <input class="form-control" name="intitule" type="text" placeholder="Intitulé de l'action" required><br>
+														
+														<label for="inputtheme" class="label label-success">Théme</label>
+											      		 <input class="form-control" name="inputtheme" type="text" placeholder="Théme de l'action" required><br>
+														
+														<label for="inputdate" class="label label-success">date action</label>
+											      		 <input class="form-control" name="inputdate" type="text" placeholder="date de l'action" required><br>
+														
+														<label for="inputduree" class="label label-success">durée</label>
+											      		 <input class="form-control" name="inputduree" type="text" placeholder="durée de l'action" required><br>
+														
+														<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
+											      		 <input class="form-control" name="inputsousparag" type="text" placeholder="Sous paragraphe" required><br>
+															
+														<label for="inputavis" class="label label-success">Avis</label>
+											      		 <input class="form-control" name="inputavis" type="text" placeholder="Avis sur l'action" required><br>
+											      	</div>
+											      											      	
+											      	<div class="col-md-1"></div>
+											      	<div class="col-md-5">
+											      	<label for="inputlieu" class="label label-success">Lieu</label>
+											      		 <input class="form-control" name="inputlieu" type="text" placeholder="lieu de l'action" required><br>
+														
+														<div class="panel panel-danger">
+															<h3><label class="label label-primary">cout dépense:</label></h3>
+															<div class="row">
+																<div class="col-md-6">
+																<label for="inputorgc">organisation</label>
+											      		        <input class="form-control" name="inputorgc" type="number" placeholder="Avis sur l'action" required><br>
+																</div>
+																<div class="col-md-6">
+																<label for="inputanc">animation</label>
+											      				 <input class="form-control" name="inputanc" type="number" placeholder="Avis sur l'action" required><br>
+																</div>
+																
+															</div>
+														</div>
+													
+														<label for="inputformateur" class="label label-success">Formateur</label>
+											      		 <input class="form-control" name="inputformateur" type="text" placeholder="formateur de l'action" required><br>
+														
+														
+														<div class="panel panel-danger">
+															<h3><label class="label label-primary">cout copération:</label></h3>
+															<div class="row">
+																<div class="col-md-6">
+																<label for="inputorgcop">organisation</label>
+											      		 <input class="form-control" name="inputorgcop" type="number" placeholder="cout organisation" required><br>
+																</div>
+																<div class="col-md-6">
+																<label for="inputanimationcop">animation</label>
+											      		 <input class="form-control" name="inputanimationcop" type="number" placeholder="cout animation" required><br>
+																</div>
+																
+															</div>
+														</div>
+														      		
+											      	</div>
+											      	</div>
+												        
+												      </div>
+											      
+											      </div>
+											      
+									   		<div th:if="${nombreutilisateur}">	
+									   			<table class="table table-striped">
+									   				<tr>
+									   					<th>Identifiant</th>
+									   					<th>Nom</th>
+									   					<th>Direction</th>
+									   					<th>Grade</th>
+									   					<th>Fonction</th>
+									   					<th></th>
+									   				</tr>
+									   				
+									   				<tr th:each="i : ${nombreutilisateur}">
+									   					<td ></td>
+									   					<td>qsds</td>
+									   					<td>qsds</td>
+									   					<td>qsds</td>
+									   					<td>qsds</td>
+									   					<td>qsds</td>
+									   				
+									   				</tr>
+									   			
+									   			</table>
+									   		</div>	
+									   		</div>
+									   	</div>
+								   
+								   </div>
+								   <div class="col-md-1" ></div>	  
+								   
+		                    </div> 
+	
+		                    </div><!-- contentpanel -->
+		                    
+		                </div><!-- mainpanel -->
+	
+</div>
+</body>
+</html>
