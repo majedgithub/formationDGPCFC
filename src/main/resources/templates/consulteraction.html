@@ -22,9 +22,7 @@
 											      	<div class="form-label-group">
 											      	<div class="row">
 											      	<div class="col-md-5">
-											      		 <label for="inputid" class="label label-danger">identifiant</label>
-											      		 <label class="form-control" th:text="${action.id}">12</label><br>
-											      		 	
+											      		
 														<label class="label label-success">intitulé</label>
 														<label class="form-control" th:text="${action.intitule}"></label>
 														
@@ -35,20 +33,21 @@
 														<label class="form-control" th:text="${action.dateaction}"></label>														
 														
 														<label for="inputduree" class="label label-success">durée</label>
-														<label class="form-control" th:text="${action.duree}"></label>
+														<label class="form-control" th:text="${action.duree +' jours'}"></label>
 														
 														<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
 														<label class="form-control" th:text="${action.sousparag}"></label>
 															
 														<label for="inputavis" class="label label-success">Avis</label>
-														<label class="form-control" th:text="${action.avis}"></label>	      		
+														<label class="form-control" th:text="${action.avis}"></label>
+														
+														<label for="inputlieu" class="label label-success">Lieu</label>
+											      		<label class="form-control" th:text="${action.lieu}"></label>		      		
 											      	</div>
 											      											      	
 											      	<div class="col-md-1"></div>
 											      	<div class="col-md-5">
-											      	<label for="inputlieu" class="label label-success">Lieu</label>
-											      		<label class="form-control" th:text="${action.lieu}"></label>	
-														
+											      	
 														<div class="panel panel-danger">
 															<h3><label class="label label-primary">cout dépence:</label></h3>
 															<div class="row">
@@ -62,7 +61,7 @@
 																</div>
 																<div class="col-md-4">
 																<label for="inputtotalcop">total</label>
-																<label class="form-control" th:text="${action.totalec}"></label>
+																<label class="form-control" th:text="${action.totalec + ' dt'}"></label>
 																</div>
 															</div>
 														</div>
@@ -89,7 +88,7 @@
 																</div>
 																<div class="col-md-4">
 																<label for="inputid">total</label>
-																<label class="form-control" th:text="${action.totalecop}"></label>
+																<label class="form-control" th:text="${action.totalecop + ' dt'}"></label>
 																</div>
 															</div>
 														</div>

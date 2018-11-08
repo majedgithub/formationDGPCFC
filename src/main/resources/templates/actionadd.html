@@ -7,6 +7,20 @@
 <title>Ajouter action</title>
 </head>
 <body>
+<datalist id="themeoption">
+<option>Bureautique</option>
+<option>Informatique</option>
+<option>Multémidia</option>
+<option>Domaine routiére</option>
+<option>Administratif</option>
+</datalist>
+
+<datalist id="employess">
+<div th:each="o : ${listempl}">
+<option th:text="o.nom"></option>
+</div>
+</datalist>
+
 	<div layout:fragment="content">
 			<div class="mainpanel">
 		         <div class="contentpanel">
@@ -18,33 +32,31 @@
 									   	<div  class="panel panel-primary">
 									   		<div class="panel-heading">Ajouter action</div>
 									   		<div class="panel-body">
-									   		<div class="row">
+									   		<div th:if="!${nombreutilisateur}" class="row">
 									   		<div class="col-md-8">
-									   		<form th:action="@{/actionadd}" method="get">
+									   		<form th:action="@{/actionadd}">
 									   		<label for="nombreutilisateur" class="label label-danger">Nombre participants</label>
 											<input class="form-control" name="nombreutilisateur" type="text" placeholder="participants" required>
 											 <input type="submit" value="envoye" class="btn btn-primary"> 		 
 									   		</form>
 									   		</div>
 									   		</div>
-									   			<div class="jumbotron">
+									   			<div th:if="${listeutilisateur}" class="jumbotron">
 											      	<div class="form-label-group">
 											      	<div class="row">
 											      	<div class="col-md-5">
 											      		 <label for="inputid" class="label label-success">Intitulé</label>
 											      		 <input class="form-control" name="intitule" type="text" placeholder="Intitulé de l'action" required><br>
 											      		 	
-														<label class="label label-success">intitulé</label>
-											      		 <input class="form-control" name="intitule" type="text" placeholder="Intitulé de l'action" required><br>
 														
 														<label for="inputtheme" class="label label-success">Théme</label>
-											      		 <input class="form-control" name="inputtheme" type="text" placeholder="Théme de l'action" required><br>
+											      		 <input class="form-control" name="inputtheme" list="themeoption" type="text" placeholder="Théme de l'action" required><br>
 														
 														<label for="inputdate" class="label label-success">date action</label>
-											      		 <input class="form-control" name="inputdate" type="text" placeholder="date de l'action" required><br>
+											      		 <input class="form-control" name="inputdate" type="date" placeholder="date de l'action" required><br>
 														
 														<label for="inputduree" class="label label-success">durée</label>
-											      		 <input class="form-control" name="inputduree" type="text" placeholder="durée de l'action" required><br>
+											      		 <input class="form-control" name="inputduree" type="number" placeholder="durée de l'action" required><br>
 														
 														<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
 											      		 <input class="form-control" name="inputsousparag" type="text" placeholder="Sous paragraphe" required><br>
@@ -63,11 +75,11 @@
 															<div class="row">
 																<div class="col-md-6">
 																<label for="inputorgc">organisation</label>
-											      		        <input class="form-control" name="inputorgc" type="number" placeholder="Avis sur l'action" required><br>
+											      		        <input class="form-control" name="inputorgc" type="number" placeholder="cout organisation en dinart" required><br>
 																</div>
 																<div class="col-md-6">
 																<label for="inputanc">animation</label>
-											      				 <input class="form-control" name="inputanc" type="number" placeholder="Avis sur l'action" required><br>
+											      				 <input class="form-control" name="inputanc" type="number" placeholder="cout animation" required><br>
 																</div>
 																
 															</div>
@@ -82,11 +94,11 @@
 															<div class="row">
 																<div class="col-md-6">
 																<label for="inputorgcop">organisation</label>
-											      		 <input class="form-control" name="inputorgcop" type="number" placeholder="cout organisation" required><br>
+											      		 		<input class="form-control" name="inputorgcop" type="number" placeholder="cout organisation cop" required><br>
 																</div>
 																<div class="col-md-6">
 																<label for="inputanimationcop">animation</label>
-											      		 <input class="form-control" name="inputanimationcop" type="number" placeholder="cout animation" required><br>
+											      				 <input class="form-control" name="inputanimationcop" type="number" placeholder="cout animation cop" required><br>
 																</div>
 																
 															</div>
@@ -98,33 +110,57 @@
 												      </div>
 											      
 											      </div>
-											      
+										<form th:action="@{/addaction}" method="post" th:object="${p}">      
 									   		<div th:if="${nombreutilisateur}">	
 									   			<table class="table table-striped">
 									   				<tr>
-									   					<th>Identifiant</th>
-									   					<th>Nom</th>
-									   					<th>Direction</th>
-									   					<th>Grade</th>
-									   					<th>Fonction</th>
-									   					<th></th>
+									   					<th width="30%">cnrps</th>
+									   					<th width="5%">participant</th>
+									   					<th width="20%">Nom</th>
+									   					<th width="20%">Direction</th>
+									   					<th width="20%">Grade</th>
+									   					
 									   				</tr>
 									   				
-									   				<tr th:each="i : ${nombreutilisateur}">
-									   					<td ></td>
-									   					<td>qsds</td>
-									   					<td>qsds</td>
-									   					<td>qsds</td>
-									   					<td>qsds</td>
-									   					<td>qsds</td>
+									   				<tr th:each="i: ${#numbers.sequence(1, nombreutilisateur)}" th:if="!${listeutilisateur}">
+									   					<td><input type="text" name="${i}"/></td>
+									   					<td th:text="${i}"></td>
+									   					<td><input type="hidden" name="nombreutilisateur" th:text="${nombreutilisateur}"></td>
+									   					<td></td>
+									   					<td></td>
 									   				
 									   				</tr>
 									   			
+									   				<tr th:each="i: ${listeutilisateur}" th:if="${listeutilisateur}">
+									   					<td><input type="text"  th:text="${i.cnrps}"/></td>
+									   					<td th:text="${i}"></td>1
+									   					<td><input type="text"  th:text="${i.nom}"></td>
+									   					<td><input type="text" th:text="${i.direction.libeleFr}"></td>
+									   					<td><input type="text" th:text="${i.grade.libelleFr}"></td>
+									   				
+									   				</tr>
+									   				
+									   				<tr th:if="${listeutilisateur}">
+									   					<td><input type="submit" class="btn btn-primary"/></td>
+									   					<td><input type="hidden" name="op" value="final"></td>
+									   					<td></td>
+									   					<td></td>
+									   					<td></td>
+									   				
+									   				</tr>
+									   				<tr th:if="!${listeutilisateur}">
+									   					<td><input type="submit" class="btn btn-primary"/></td>
+									   					<td><input type="hidden" name="op" value="first"></td>
+									   					<td></td>
+									   					<td></td>
+									   					<td></td>
+									   				
+									   				</tr>
 									   			</table>
-									   		</div>	
+									   		</div>
+									   		</form>		
 									   		</div>
 									   	</div>
-								   
 								   </div>
 								   <div class="col-md-1" ></div>	  
 								   

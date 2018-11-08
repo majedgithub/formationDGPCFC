@@ -12,6 +12,5 @@ public interface IemployeCTRL {
 	public Employe EditEmploye(Employe e);
 	public Page<Employe> listeEmploye(int page, int size);
 	public void updateListeEmployeExcel(Collection<Employe> newEmp);
-	
 	public Long NumbreEmploye();
 }

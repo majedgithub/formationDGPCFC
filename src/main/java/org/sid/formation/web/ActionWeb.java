@@ -1,10 +1,13 @@
 package org.sid.formation.web;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.sid.formation.dao.EmployeRepository;
 import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
 import org.sid.formation.metier.Iaction;
@@ -26,6 +29,9 @@ public class ActionWeb {
 	IemployeCTRL iemploye;
 	
 	@Autowired
+	EmployeRepository iemployeRepo;
+	
+	@Autowired
 	PdfGenaratorUtil pdfGenaratorUtil;
 	
 	@RequestMapping(value="/t")
@@ -34,15 +40,23 @@ public class ActionWeb {
 	}
 	
 	@RequestMapping(value="/home")
-	public String accueil(Model model,@RequestParam(name="page", defaultValue="0") int page, @RequestParam(name="size", defaultValue="5") int size) {
+	public String accueil(Model model,@RequestParam(name="page", defaultValue="0") int page,
+			@RequestParam(name="size", defaultValue="5") int size,
+			@RequestParam(name="inputintitule", defaultValue=" ") String inputintitule) {
+		
+			model.addAttribute("countaction", iaction.CountActions());
+			model.addAttribute("countemploye", iemploye.NumbreEmploye());
+		
+		if(!(inputintitule.equals(" ")) ) {
+			Page<Action> listeActions = iaction.listeActionsIntitule(inputintitule,0,5);
+			int pages = listeActions.getTotalPages();
+				model.addAttribute("listeActions", listeActions);
+			}	
 		
 		Page<Action> listeActions = iaction.listeActions(page, size);
 		int pages = listeActions.getTotalPages();
-		int siz = listeActions.getNumberOfElements();
 		model.addAttribute("listeActions", listeActions);
 		model.addAttribute("pages", pages);
-		model.addAttribute("siz", siz);
-		model.addAttribute("sizeemployes", iemploye.NumbreEmploye());
 		return "home";
 	}
 	
@@ -88,8 +102,7 @@ public class ActionWeb {
 			
 			break;
 		}
-		 
-		/*
+	/*
 		 Map<String,String> data = new HashMap<String,String>();
 		    data.put("name","James");
 		    pdfGenaratorUtil.createPdf("Attestation",data); */
@@ -98,12 +111,18 @@ public class ActionWeb {
 	}
 	
 	@RequestMapping(value="/actionadd")
-	public String ActionAdd(Model model, String nombreutilisateur) {
-		if(nombreutilisateur !=null ) {
+	public String ActionAdd(Model model, @RequestParam(name="nombreutilisateur", defaultValue ="0") int nombreutilisateur
+			,@RequestParam(name="op", defaultValue ="x") String op) {
+		
+		if( nombreutilisateur != 0 ) {
 			
-			model.addAttribute("nombreutilisateur", Integer.parseInt(nombreutilisateur));
+			List<Employe> listempl = iemployeRepo.findAll();
+			
+			model.addAttribute("nombreutilisateur", nombreutilisateur);
+			model.addAttribute("listempl", listempl);
 		}
 		
 		return "actionadd";
 	}
+	
 }

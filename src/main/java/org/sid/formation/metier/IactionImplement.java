@@ -1,5 +1,6 @@
 package org.sid.formation.metier;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.sid.formation.dao.ActionRepository;
@@ -35,6 +36,29 @@ public class IactionImplement implements Iaction{
 	public Page<Action> listeActions(int page, int size) {
 		// TODO Auto-generated method stub
 		return actionR.listeActions(new PageRequest(page, size));
+	}
+
+	@Override
+	public Page<Action> listeActionsIntitule(String intitule,int page, int size) {
+		// TODO Auto-generated method stub
+		return actionR.listeActionsSearchIntitule(intitule,new PageRequest(page,size));
+	}
+
+	@Override
+	public Page<Action> listeActionsDate(Date dateaction,int page, int size) {
+		// TODO Auto-generated method stub
+		return actionR.listeActionsSearchDate(dateaction,new PageRequest(page,size));
+	}
+
+	@Override
+	public Page<Action> listeActionsIntituleDate(String intitule,Date dateaction,int page, int size) {
+		// TODO Auto-generated method stub
+		return actionR.listeActionsIntituleDate(intitule,dateaction,(new PageRequest(page,size)));
+	}
+
+	@Override
+	public long CountActions() {
+		return actionR.count();
 	}
 
 }

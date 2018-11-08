@@ -18,21 +18,29 @@
 								   	<div  class="panel panel-primary">
 								   		<div class="panel-heading">Liste des actions</div>
 								   		<div class="panel-body">
+								   		<div th:if="${ooo}"><label th:text="${ooo}"></label></div>
+								   			<div class="row">
+								   			<div class="col-md-10"></div>
+								   			<div class="col-md-2">  
+								   			<a th:href="@{/actionadd}" class="btn btn-warning">Ajouter action</a>
+								   			</div>
+								   			
+								   			</div>
 								   			<table class="table table-striped">
 								   				<tr>
-								   					<th>cnrps</th>
-								   					<th>nom</th>
-								   					<th>direction</th>
-								   					<th>grade</th>
-								   					<th>fonction</th>
+								   					<th>intitulé</th>
+								   					<th width="15%">date action</th>
+								   					<th width="5%">durée</th>
+								   					<th>lieu action</th>
+								   					<th>formateur</th>
 								   					<th width="20%"></th>
 								   				</tr>
 								   				<tr th:each="o:${listeActions}">
-								   				 	<td th:text="${o.id}"></td>
 								   				 	<td th:text="${o.intitule}"></td>
-								   				 	<td th:text="${o.dateaction}"></td>
+								   				 	<td th:text="${#dates.format(o.dateaction, 'dd-MMM-yyyy')}"></td>
 								   				 	<td th:text="${o.duree}"></td>
 								   				 	<td th:text="${o.lieu}"></td>
+								   				 	<td th:text="${o.formateur.nom}"></td>
 								   				 	<td><a class="btn btn-info" th:href="@{/consulterAction(idac = ${o.id})}">view</a>
 								   				 	<a class="btn btn-success" th:href="@{/consulterAction(idac = ${o.id})}">edit</a></td>
 								   				</tr>
@@ -51,18 +59,56 @@
 							   
 							   </div>
 								    <div class="col-md-3">      
+								     
+								       <div class="row">
+		                                <div class="panel panel-success">
+		                                    <div class="panel-heading noborder">
+		                                        <div class="panel-btns">
+		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" data-placement="left" title="Close Panel"><i class="fa fa-times"></i></a>
+		                                        </div><!-- panel-btns -->
+		                                        <div class="panel-icon"><i class="fa fa-pencil"></i></div>
+		                                        <div class="media-body">
+		                                            <h3 class="md-title nomargin">Chercher : </h3>		                                             
+		                                             	
+												   				<form th:action="@{/home}">
+												   					<input class="form-control" type="text" id="inputintitule" name="inputintitule" placeholder="recherche par intitulé action" required/>
+												   					
+												   					<input class="btn btn-primary" type="submit" value="chercher"/>
+												   				</form>
+												   			
+											   			
+		                                        </div><!-- media-body -->
+		                                       
+		                                    </div><!-- panel-body -->
+		                                </div><!-- panel -->
+		                            </div><!-- col-md-4 -->
 								                
 		                            <div class="row">
 		                                <div class="panel panel-default">
 		                                    <div class="panel-heading">
-		                                        <div class="panel-btns">
-		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-		                                        </div><!-- panel-btns -->
-		                                        <div class="panel-icon"><i class="fa fa-home"></i></div>
+		                                      
 		                                        <div class="media-body">
-		                                            <h5 class="md-title nomargin">Les employes</h5>
+		                                            <h3 class="md-title nomargin">Les employes</h3>
 		                                            <hr>
-		                                            <h1 class="mt5" th:text="${sizeemployes}"></h1>
+		                                            <div class="col-md-4"><h1 th:text="${countemploye}"></h1></div>
+		                                             <div class="col-md-3"></div>
+		                                            <div class="col-md-5"><img src="images/avatar7.png" class="media-object" style="width:100px"></div>
+		                                        
+		                                        </div><!-- media-body -->
+		                                    </div><!-- panel-body -->
+		                                </div><!-- panel -->
+		                            </div><!-- col-md-4 -->
+		                            
+		                               <div class="row">
+		                                <div class="panel panel-default">
+		                                    <div class="panel-heading">
+		                                      
+		                                        <div class="media-body">
+		                                            <h3 class="md-title nomargin">Les actions</h3>
+		                                            <hr>
+		                                            <div class="col-md-4"><h1 th:text="${countaction}"></h1></div>
+		                                            <div class="col-md-8"><img src="images/avatarformation.jpg" class="media-object" style="width:200px; height=100px"></div>
+		                                        
 		                                        </div><!-- media-body -->
 		                                        
 		                                    
@@ -71,41 +117,7 @@
 		                                </div><!-- panel -->
 		                            </div><!-- col-md-4 -->
 		                            
-		                           <div class="row">
-		                                <div class="panel panel-primary noborder">
-		                                    <div class="panel-heading noborder">
-		                                        <div class="panel-btns">
-		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-		                                        </div><!-- panel-btns -->
-												
-		                                        <div class="panel-icon"><i class="fa fa-apple"></i></div>
-		                                        <div class="media-body">
-		                                            <h5 class="md-title nomargin">Les actions internes</h5>
-		                                             <hr>
-		                                            <h1 class="mt5" th:text="${siz}"> actions</h1>
-		                                        </div><!-- media-body -->
-		                                       
-		                                        
-		                                    </div><!-- panel-body -->
-		                                </div><!-- panel -->
-		                            </div><!-- col-md-4 -->
-		                            
-		                            <div class="row">
-		                                <div class="panel panel-success">
-		                                    <div class="panel-heading noborder">
-		                                        <div class="panel-btns">
-		                                            <a href="#" class="panel-close tooltips" data-toggle="tooltip" data-placement="left" title="Close Panel"><i class="fa fa-times"></i></a>
-		                                        </div><!-- panel-btns -->
-		                                        <div class="panel-icon"><i class="fa fa-pencil"></i></div>
-		                                        <div class="media-body">
-		                                            <h5 class="md-title nomargin">Les actions extérieurs</h5>
-		                                             <hr>
-		                                            <h1 class="mt5">153,900</h1>
-		                                        </div><!-- media-body -->
-		                                       
-		                                    </div><!-- panel-body -->
-		                                </div><!-- panel -->
-		                            </div><!-- col-md-4 -->
+		                          
 		                            </div>
 		                            </div> 
 		                        </div><!-- row -->
