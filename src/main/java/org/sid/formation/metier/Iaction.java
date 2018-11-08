@@ -10,7 +10,8 @@ import org.springframework.data.domain.Page;
 public interface Iaction {
 
 	public Action ConsulterAction(Long id) throws Exception;
-	public Action AjouterAction(Action c, Set<Employe> emps);
+	public Action AjouterAction(Action c) throws Exception;
+	public void AffecterEmployeTAction(Action c, Employe e) throws Exception;
 	public Page<Action> listeActions(int page, int size);
 	public Page<Action> listeActionsIntitule(String intitule,int page, int size);
 	public Page<Action> listeActionsDate(Date dateaction, int page, int size);

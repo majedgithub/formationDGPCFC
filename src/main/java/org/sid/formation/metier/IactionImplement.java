@@ -1,6 +1,9 @@
 package org.sid.formation.metier;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.sid.formation.dao.ActionRepository;
@@ -18,6 +21,9 @@ public class IactionImplement implements Iaction{
 
 	@Autowired
 	ActionRepository actionR;
+	
+	@Autowired
+	IemployeCTRL iemploye;
 	@Override
 	public Action ConsulterAction(Long id) throws Exception {
 		Action a = actionR.getOne(id);
@@ -27,9 +33,9 @@ public class IactionImplement implements Iaction{
 	}
 
 	@Override
-	public Action AjouterAction(Action c, Set<Employe> emps) {
-		// TODO Auto-generated method stub
-		return null;
+	public Action AjouterAction(Action c)  {
+			return actionR.save(c);
+		
 	}
 
 	@Override
@@ -59,6 +65,26 @@ public class IactionImplement implements Iaction{
 	@Override
 	public long CountActions() {
 		return actionR.count();
+	}
+
+	@Override
+	public void AffecterEmployeTAction(Action c, Employe e) throws Exception {
+
+		try {
+			if(c.getEmployes() !=null) {
+				c.getEmployes().add(e);
+				e = iemploye.AffecterActionToEmploye(c, e);
+			}else {
+			 Set<Employe> listemp = new HashSet<>();
+			 listemp.add(e);
+				e=iemploye.AffecterActionToEmploye(c, e);
+			}
+			
+			iemploye.AjouterEmploye(e);
+			AjouterAction(c);
+		} catch (Exception e2) {
+			// TODO: handle exception
+		}
 	}
 
 }

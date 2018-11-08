@@ -32,14 +32,21 @@
 									   	<div  class="panel panel-primary">
 									   		<div class="panel-heading">Ajouter action</div>
 									   		<div class="panel-body">
-									   		 <form th:action="@{/actionadda}" method="post">
-									   			<div class="jumbotron">
+									   		<div th:if="!${nombreutilisateur}" class="row">
+									   		<div class="col-md-8">
+									   		<form th:action="@{/actionadd}">
+									   		<label for="nombreutilisateur" class="label label-danger">Nombre participants</label>
+											<input class="form-control" name="nombreutilisateur" type="text" placeholder="participants" required>
+											 <input type="submit" value="envoye" class="btn btn-primary"> 		 
+									   		</form>
+									   		</div>
+									   		</div>
+									   			<div th:if="${listeutilisateur}" class="jumbotron">
 											      	<div class="form-label-group">
 											      	<div class="row">
 											      	<div class="col-md-5">
-											      	 <label for="inputintitule" class="label label-success" th:text="${test}"></label>
-											      		 <label for="inputintitule" class="label label-success">Intitulé</label>
-											      		 <input class="form-control" name="inputintitule" type="text" placeholder="Intitulé de l'action" required><br>
+											      		 <label for="inputid" class="label label-success">Intitulé</label>
+											      		 <input class="form-control" name="intitule" type="text" placeholder="Intitulé de l'action" required><br>
 											      		 	
 														
 														<label for="inputtheme" class="label label-success">Théme</label>
@@ -56,9 +63,6 @@
 															
 														<label for="inputavis" class="label label-success">Avis</label>
 											      		 <input class="form-control" name="inputavis" type="text" placeholder="Avis sur l'action" required><br>
-											      		 
-											      		 <label for="inputbureau" class="label label-success">Bureau</label>
-											      		 <input class="form-control" name="inputbureau" type="text" placeholder="bureau de l'action" required><br>
 											      	</div>
 											      											      	
 											      	<div class="col-md-1"></div>
@@ -82,10 +86,9 @@
 														</div>
 													
 														<label for="inputformateur" class="label label-success">Formateur</label>
-														<select class="form-control" name="inputformateur">
-														    <option th:each="i : ${listFormateur}" th:value="${i.id}" th:text="${i.nom}">
-														    </option>
-														</select>
+											      		 <input class="form-control" name="inputformateur" type="text" placeholder="formateur de l'action" required><br>
+														
+														
 														<div class="panel panel-danger">
 															<h3><label class="label label-primary">cout copération:</label></h3>
 															<div class="row">
@@ -100,9 +103,6 @@
 																
 															</div>
 														</div>
-														<div class="row">
-														 <input type="submit" class="btn btn-primary" th:if="!${idaction}">
-														</div>
 														      		
 											      	</div>
 											      	</div>
@@ -110,35 +110,27 @@
 												      </div>
 											      
 											      </div>
-											     </form> 
-											      
-											 	<div th:if="${actiondet}"  class="panel panel-warning">
-											   		<div class="panel-heading">Ajouter un employe à l'action</div>
-											   		<div class="panel-body">
-											   		<form th:action="@{/actionaddb}" method="post">
-												      	<div class="row">
-													      	<div class="col-md-3">
-													      		 <input class="form-control" name="inputcnrps2" type="text" placeholder="Cnrps de l'employe" required><br>
-													      		 <input class="form-control" name="inputid" type="hidden" th:text="${idaction}"><br>
-									
-															</div>		      	
-												      		<div class="col-md-1"><input type="submit" class="btn btn-warning"></div>
-													      	<div class="col-md-5"></div>
-												      	</div>
-												      </form>
-												      </div>  
-												  </div>  
-									  
-									   			<table th:if="${actiondet}" class="table table-striped">
+										<form th:action="@{/addaction}" method="post" th:object="${element}">      
+									   		<div th:if="${nombreutilisateur}">	
+									   			<table class="table table-striped">
 									   				<tr>
-									   					<th width="30%"> <label th:text=${actiondet.id}></label></th>
+									   					<th width="30%">cnrps</th>
 									   					<th width="5%">participant</th>
 									   					<th width="20%">Nom</th>
 									   					<th width="20%">Direction</th>
 									   					<th width="20%">Grade</th>
 									   					
 									   				</tr>
-									   												   			
+									   				
+									   				<tr th:each="i: ${#numbers.sequence(1, nombreutilisateur)}" th:if="!${listeutilisateur}">
+									   					<td><input type="text" th:field="${i}"/></td>
+									   					<td th:text="${i}"></td>
+									   					<td><input type="hidden" th:field="nombreutilisateur" th:text="${nombreutilisateur}"></td>
+									   					<td></td>
+									   					<td></td>
+									   				
+									   				</tr>
+									   			
 									   				<tr th:each="i: ${listeutilisateur}" th:if="${listeutilisateur}">
 									   					<td><input type="text"  th:text="${i.cnrps}"/></td>
 									   					<td th:text="${i}"></td>
@@ -147,9 +139,33 @@
 									   					<td><input type="text" th:text="${i.grade.libelleFr}"></td>
 									   				
 									   				</tr>
-									   			
+									   				
+									   				<tr th:if="${listeutilisateur}">
+									   					<td><input type="submit" class="btn btn-primary"/></td>
+									   					<td><input type="hidden" name="op" value="final"></td>
+									   					<td></td>
+									   					<td></td>
+									   					<td></td>
+									   				
+									   				</tr>
+									   				<tr th:if="!${listeutilisateur}">
+									   					<td><input type="submit" class="btn btn-primary"/></td>
+									   					<td><input type="hidden" name="op" value="first"></td>
+									   					<td></td>
+									   					<td></td>
+									   					<td></td>
+									   				
+									   				</tr>
+									   				<tr>
+									   				<td th:if="${element}"><input type="submit" class="btn btn-primary"/></td>
+									   					<td>okkk</td>
+									   					<td>sss</td>
+									   					<td>ss</td>
+									   					<td>sss</td>
+									   				</tr>
 									   			</table>
-									   		
+									   		</div>
+									   		</form>		
 									   		</div>
 									   	</div>
 								   </div>

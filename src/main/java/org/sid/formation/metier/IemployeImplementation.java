@@ -1,8 +1,11 @@
 package org.sid.formation.metier;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.sid.formation.dao.EmployeRepository;
+import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,8 +26,7 @@ public class IemployeImplementation  implements IemployeCTRL{
 
 	@Override
 	public Employe AjouterEmploye(Employe c) {
-		// TODO Auto-generated method stub
-		return null;
+		return emp.save(c);
 	}
 
 	@Override
@@ -48,6 +50,28 @@ public class IemployeImplementation  implements IemployeCTRL{
 	@Override
 	public Long NumbreEmploye() {
 		return emp.count();
+	}
+
+	@Override
+	public Employe AffecterActionToEmploye(Action c, Employe e) {
+
+		try {
+			if(e.getActions() !=null) {
+				e.getActions().add(c);
+			}else {
+				Set<Action> listaction = new HashSet<>();
+				listaction.add(c);
+			}
+		} catch (Exception e2) {
+			// TODO: handle exception
+		}
+		return e;
+	}
+
+	@Override
+	public Employe ConsulterEmployeByCnrps(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return emp.findByCnrps(id);
 	}
 
 }

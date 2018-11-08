@@ -1,5 +1,8 @@
 package org.sid.formation.web;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +13,8 @@ import java.util.Set;
 import org.sid.formation.dao.EmployeRepository;
 import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
+import org.sid.formation.entities.Formateur;
+import org.sid.formation.metier.IFormateur;
 import org.sid.formation.metier.Iaction;
 import org.sid.formation.metier.IemployeCTRL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +24,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import groovy.util.logging.Log;
+
 @Controller
 public class ActionWeb {
 
 	@Autowired
 	Iaction iaction;
+	
+	@Autowired
+	IFormateur iFormateur;
 	
 	@Autowired
 	IemployeCTRL iemploye;
@@ -34,9 +44,9 @@ public class ActionWeb {
 	@Autowired
 	PdfGenaratorUtil pdfGenaratorUtil;
 	
-	@RequestMapping(value="/t")
+	@RequestMapping(value="/")
 	public String homef() {
-		return "template1";
+		return "home";
 	}
 	
 	@RequestMapping(value="/home")
@@ -110,16 +120,69 @@ public class ActionWeb {
 		return "Attestation";
 	}
 	
-	@RequestMapping(value="/actionadd")
-	public String ActionAdd(Model model, @RequestParam(name="nombreutilisateur", defaultValue ="0") int nombreutilisateur
-			,@RequestParam(name="op", defaultValue ="x") String op) {
+	@RequestMapping(value="/actionadda")
+	public String ActionAdda(Model model ,@RequestParam(name="inputintitule", defaultValue = "o") String inputintitule
+			,@RequestParam(name="inputtheme", defaultValue = "") String inputtheme
+			,@RequestParam(name="inputdate", defaultValue = "29-Apr-2010,13:00:14 PM") String inputdate
+			,@RequestParam(name="inputduree", defaultValue = "") Double inputduree
+			,@RequestParam(name="inputsousparag", defaultValue = "") String inputsousparag
+			,@RequestParam(name="inputlieu", defaultValue = "") String inputlieu
+			,@RequestParam(name="inputavis", defaultValue = "") String inputavis
+			,@RequestParam(name="inputorgc", defaultValue = "") Double inputorgc
+			,@RequestParam(name="inputanc", defaultValue = "") Double inputanc
+			,@RequestParam(name="inputformateur", defaultValue = "") String inputformateur
+			,@RequestParam(name="inputorgcop", defaultValue = "") Double inputorgcop
+			,@RequestParam(name="inputanimationcop", defaultValue = "") Double inputanimationcop
+			,@RequestParam(name="inputbureau", defaultValue = "") String inputbureau) throws Exception {
 		
-		if( nombreutilisateur != 0 ) {
+		if(!inputintitule.equals("o")) {
 			
-			List<Employe> listempl = iemployeRepo.findAll();
+			try {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd"); 
+			    Date convertedDate = dateFormat.parse(inputdate); 
+				Double tot1 = inputorgc + inputanc;
+				Double tot2 = inputorgcop + inputanimationcop;
+				long form = Integer.parseInt(inputformateur);
+				Formateur f = iFormateur.getFormateur(form);
 			
-			model.addAttribute("nombreutilisateur", nombreutilisateur);
-			model.addAttribute("listempl", listempl);
+					Action act = new Action(inputintitule, inputtheme, inputlieu, inputbureau, convertedDate, inputduree, inputavis, inputanc, inputorgc, tot1, inputsousparag, 1, inputanimationcop, inputorgcop, tot2, f);
+
+					Action news = iaction.AjouterAction(act);
+					model.addAttribute("actiondet", news);
+					model.addAttribute("test", "ok");
+					model.addAttribute("idaction", news.getId());
+					
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+					
+		}else {
+			
+			List<Formateur> listFormateur = iFormateur.ListFormateur();
+			model.addAttribute("listFormateur", listFormateur);
+			model.addAttribute("test", "no");
+		}
+		
+		return "actionadd";
+	}
+	
+	@RequestMapping(value="/actionaddb")
+	public String ActionAddb(Model model, @RequestParam(name="inputcnrps2", defaultValue = "0") String inputcnrps2
+			, @RequestParam(name="inputid", defaultValue = "0") String inputid) {
+		
+		if( !inputcnrps2.equals("0") &&  !inputid.equals("0")) {
+			
+			try {
+				Action actione = iaction.ConsulterAction(Long.parseLong(inputid));
+				Employe emp = iemploye.ConsulterEmployeByCnrps(inputcnrps2);
+				
+				if(actione!= null) {
+					iaction.AffecterEmployeTAction(actione, emp);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
 		
 		return "actionadd";
