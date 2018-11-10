@@ -45,28 +45,33 @@ public class ActionWeb {
 	PdfGenaratorUtil pdfGenaratorUtil;
 	
 	@RequestMapping(value="/")
-	public String homef() {
-		return "home";
+	public String homef(Model model) throws Exception {
+		
+		Employe emp = iemploye.ConsulterEmployeByCnrps("984565");
+		model.addAttribute("emp", emp);
+		return "qsd";
 	}
 	
 	@RequestMapping(value="/home")
 	public String accueil(Model model,@RequestParam(name="page", defaultValue="0") int page,
-			@RequestParam(name="size", defaultValue="5") int size,
+			@RequestParam(name="size", defaultValue="7") int size,
 			@RequestParam(name="inputintitule", defaultValue=" ") String inputintitule) {
 		
 			model.addAttribute("countaction", iaction.CountActions());
 			model.addAttribute("countemploye", iemploye.NumbreEmploye());
 		
 		if(!(inputintitule.equals(" ")) ) {
-			Page<Action> listeActions = iaction.listeActionsIntitule(inputintitule,0,5);
+			Page<Action> listeActions = iaction.listeActionsIntitule(inputintitule,0,7);
 			int pages = listeActions.getTotalPages();
 				model.addAttribute("listeActions", listeActions);
-			}	
+				model.addAttribute("pages", pages);
+			}else {	
 		
 		Page<Action> listeActions = iaction.listeActions(page, size);
 		int pages = listeActions.getTotalPages();
 		model.addAttribute("listeActions", listeActions);
 		model.addAttribute("pages", pages);
+			}
 		return "home";
 	}
 	
@@ -131,9 +136,12 @@ public class ActionWeb {
 			,@RequestParam(name="inputorgc", defaultValue = "") Double inputorgc
 			,@RequestParam(name="inputanc", defaultValue = "") Double inputanc
 			,@RequestParam(name="inputformateur", defaultValue = "") String inputformateur
-			,@RequestParam(name="inputorgcop", defaultValue = "") Double inputorgcop
-			,@RequestParam(name="inputanimationcop", defaultValue = "") Double inputanimationcop
+			,@RequestParam(name="inputorgcop", defaultValue = "0") Double inputorgcop
+			,@RequestParam(name="inputanimationcop", defaultValue = "0") Double inputanimationcop
 			,@RequestParam(name="inputbureau", defaultValue = "") String inputbureau) throws Exception {
+		
+			model.addAttribute("addactionpage", "true");
+			model.addAttribute("showinput", "true");
 		
 		if(!inputintitule.equals("o")) {
 			
@@ -144,24 +152,22 @@ public class ActionWeb {
 				Double tot2 = inputorgcop + inputanimationcop;
 				long form = Integer.parseInt(inputformateur);
 				Formateur f = iFormateur.getFormateur(form);
-			
+				
 					Action act = new Action(inputintitule, inputtheme, inputlieu, inputbureau, convertedDate, inputduree, inputavis, inputanc, inputorgc, tot1, inputsousparag, 1, inputanimationcop, inputorgcop, tot2, f);
 
 					Action news = iaction.AjouterAction(act);
 					model.addAttribute("actiondet", news);
-					model.addAttribute("test", "ok");
 					model.addAttribute("idaction", news.getId());
-					
+					model.addAttribute("showinput", null);
+					model.addAttribute("showlabel", "true");
 
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 					
 		}else {
-			
 			List<Formateur> listFormateur = iFormateur.ListFormateur();
 			model.addAttribute("listFormateur", listFormateur);
-			model.addAttribute("test", "no");
 		}
 		
 		return "actionadd";
@@ -169,20 +175,32 @@ public class ActionWeb {
 	
 	@RequestMapping(value="/actionaddb")
 	public String ActionAddb(Model model, @RequestParam(name="inputcnrps2", defaultValue = "0") String inputcnrps2
-			, @RequestParam(name="inputid", defaultValue = "0") String inputid) {
+			, @RequestParam(name="inputid", defaultValue = "0") String inputid) throws Exception {
+		
+		model.addAttribute("showlabel", "true");
+		model.addAttribute("idaction", inputid);
+		model.addAttribute("addactionpage", "true");
 		
 		if( !inputcnrps2.equals("0") &&  !inputid.equals("0")) {
+			model.addAttribute("t", "1");
+			Action actione = iaction.ConsulterAction(Long.parseLong(inputid));
+			Employe emp = iemploye.ConsulterEmployeByCnrps(inputcnrps2);
+			model.addAttribute("actiondet", actione);
 			
-			try {
-				Action actione = iaction.ConsulterAction(Long.parseLong(inputid));
-				Employe emp = iemploye.ConsulterEmployeByCnrps(inputcnrps2);
-				
-				if(actione!= null) {
-					iaction.AffecterEmployeTAction(actione, emp);
+				if(actione != null && emp != null) {
+					 actione = iaction.AffecterEmployeTAction(actione, emp);
+					 emp = iemploye.AffecterActionToEmploye(actione, emp);
+					 
+					 actione = iaction.AjouterAction(actione);
+					emp = iemploye.AjouterEmploye(emp);
+					 
+					 model.addAttribute("emp", emp); 
+					model.addAttribute("idaction", actione.getId());
+					model.addAttribute("listeutilisateur", actione.getEmployes());
+					model.addAttribute("actiondet", actione);
+					model.addAttribute("t", "2");
 				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+				
 		}
 		
 		return "actionadd";

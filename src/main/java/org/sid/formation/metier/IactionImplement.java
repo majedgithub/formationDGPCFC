@@ -68,23 +68,18 @@ public class IactionImplement implements Iaction{
 	}
 
 	@Override
-	public void AffecterEmployeTAction(Action c, Employe e) throws Exception {
+	public Action AffecterEmployeTAction(Action c, Employe e) throws Exception {
 
-		try {
 			if(c.getEmployes() !=null) {
 				c.getEmployes().add(e);
-				e = iemploye.AffecterActionToEmploye(c, e);
 			}else {
 			 Set<Employe> listemp = new HashSet<>();
 			 listemp.add(e);
-				e=iemploye.AffecterActionToEmploye(c, e);
 			}
+			//iemploye.AjouterEmploye(e);
+			//Action a =AjouterAction(c);
 			
-			iemploye.AjouterEmploye(e);
-			AjouterAction(c);
-		} catch (Exception e2) {
-			// TODO: handle exception
-		}
+			return c;
 	}
 
 }

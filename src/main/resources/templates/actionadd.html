@@ -7,19 +7,7 @@
 <title>Ajouter action</title>
 </head>
 <body>
-<datalist id="themeoption">
-<option>Bureautique</option>
-<option>Informatique</option>
-<option>Multémidia</option>
-<option>Domaine routiére</option>
-<option>Administratif</option>
-</datalist>
 
-<datalist id="employess">
-<div th:each="o : ${listempl}">
-<option th:text="o.nom"></option>
-</div>
-</datalist>
 
 	<div layout:fragment="content">
 			<div class="mainpanel">
@@ -29,12 +17,13 @@
 		                    	<div class="col-md-1" ></div>	                        
 								   <div class="col-md-10" >
 								
-									   	<div  class="panel panel-primary">
+									   	<div th:if="${addactionpage}"  class="panel panel-primary">
 									   		<div class="panel-heading">Ajouter action</div>
 									   		<div class="panel-body">
+									   		
 									   		 <form th:action="@{/actionadda}" method="post">
 									   			<div class="jumbotron">
-											      	<div class="form-label-group">
+											      	<div th:if="${showinput}" class="form-label-group">
 											      	<div class="row">
 											      	<div class="col-md-5">
 											      	 <label for="inputintitule" class="label label-success" th:text="${test}"></label>
@@ -43,7 +32,13 @@
 											      		 	
 														
 														<label for="inputtheme" class="label label-success">Théme</label>
-											      		 <input class="form-control" name="inputtheme" list="themeoption" type="text" placeholder="Théme de l'action" required><br>
+														<select class="form-control" name="inputtheme">
+															<option>Informatique</option>
+															 <option>Multimédia</option>
+															 <option>DOmaine routiére</option>
+															 <option>Administratif</option>
+															 <option>Juridique</option>
+														</select><br>
 														
 														<label for="inputdate" class="label label-success">date action</label>
 											      		 <input class="form-control" name="inputdate" type="date" placeholder="date de l'action" required><br>
@@ -91,11 +86,11 @@
 															<div class="row">
 																<div class="col-md-6">
 																<label for="inputorgcop">organisation</label>
-											      		 		<input class="form-control" name="inputorgcop" type="number" placeholder="cout organisation cop" required><br>
+											      		 		<input class="form-control" name="inputorgcop" type="number" placeholder="cout organisation cop" ><br>
 																</div>
 																<div class="col-md-6">
 																<label for="inputanimationcop">animation</label>
-											      				 <input class="form-control" name="inputanimationcop" type="number" placeholder="cout animation cop" required><br>
+											      				 <input class="form-control" name="inputanimationcop" type="number" placeholder="cout animation cop" ><br>
 																</div>
 																
 															</div>
@@ -108,18 +103,93 @@
 											      	</div>
 												        
 												      </div>
-											      
-											      </div>
-											     </form> 
-											      
-											 	<div th:if="${actiondet}"  class="panel panel-warning">
-											   		<div class="panel-heading">Ajouter un employe à l'action</div>
+											      	
+											      	<div th:if="${showlabel}" class="form-label-group">
+											      	<div class="row">
+											      	<div class="col-md-5">
+											      	 <label for="inputintitule" class="label label-success" th:text="${test}"></label>
+											      		 <label  class="label label-success">Intitulé</label>
+											      		 <label th:text="${actiondet.intitule}"  class="form-control"></label>
+											      		 	
+														
+														<label for="inputtheme" class="label label-success">Théme</label>
+														<label th:text="${actiondet.theme}"  class="form-control"></label>
+														
+														<label for="inputdate" class="label label-success">date action</label>
+											      		 <label th:text="${actiondet.dateaction}"  class="form-control"></label>
+														
+														<label for="inputduree" class="label label-success">durée</label>
+											      		 <label th:text="${actiondet.duree + 'jours'}"  class="form-control"></label>
+														
+														<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
+											      		 <label th:text="${actiondet.sousparag}"  class="form-control"></label>
+															
+														<label for="inputavis" class="label label-success">Avis</label>
+											      		 <label th:text="${actiondet.avis}"  class="form-control"></label>
+											      		 
+											      		 <label for="inputbureau" class="label label-success">Bureau</label>
+											      		 <label th:text="${actiondet.bureau}"  class="form-control"></label>
+											      	</div>
+											      											      	
+											      	<div class="col-md-1"></div>
+											      	<div class="col-md-5">
+											      	<label for="inputlieu" class="label label-success">Lieu</label>
+											      		 <label th:text="${actiondet.lieu}"  class="form-control"></label>
+														
+														<div class="panel panel-danger">
+															<h3><label class="label label-primary">cout dépense:</label></h3>
+															<div class="row">
+																<div class="col-md-4">
+																<label for="inputorgc">organisation</label>
+											      		        <label th:text="${actiondet.organisationc}"  class="form-control"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputanc">animation</label>
+											      				 <label th:text="${actiondet.animationc}"  class="form-control"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputanc">totale</label>
+											      				 <label th:text="${actiondet.totalec}"  class="form-control"></label>
+																</div>
+															</div>
+														</div>
+													
+														<label for="inputformateur" class="label label-success">Formateur</label>
+														<label th:text="${actiondet.formateur.nom}"  class="form-control"></label>
+														<div class="panel panel-danger">
+															<h3><label class="label label-primary">cout coopération:</label></h3>
+																<div class="row">
+																<div class="col-md-4">
+																<label for="inputorgc">organisation</label>
+											      		        <label  th:text="${actiondet.organisationcop}"  class="form-control"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputanc">animation</label>
+											      				 <label th:text="${actiondet.animationcop}"  class="form-control"></label>
+																</div>
+																<div class="col-md-4">
+																<label for="inputanc">totale</label>
+											      				 <label th:text="${actiondet.totalecop}"  class="form-control"></label>
+																</div>
+															</div>
+														</div>
+														      		
+											      	</div>
+											      	</div>
+												        
+												      </div>
+											    </div>
+											 </form> 
+											 <div th:if="${t}" th:text="${t}"></div>
+											
+											 	<div th:if="${idaction}"  class="panel panel-warning">
+											   		<div class="panel-heading">Ajouter un employe à l'action <label th:text="${idaction}"></label></div>
 											   		<div class="panel-body">
-											   		<form th:action="@{/actionaddb}" method="post">
+											   		<form th:action="@{/actionaddb}" method="get">
 												      	<div class="row">
 													      	<div class="col-md-3">
 													      		 <input class="form-control" name="inputcnrps2" type="text" placeholder="Cnrps de l'employe" required><br>
-													      		 <input class="form-control" name="inputid" type="hidden" th:text="${idaction}"><br>
+													      		 <input class="form-control" name="inputid" type="hidden" th:value="${idaction}"><br>
 									
 															</div>		      	
 												      		<div class="col-md-1"><input type="submit" class="btn btn-warning"></div>
@@ -129,22 +199,22 @@
 												      </div>  
 												  </div>  
 									  
-									   			<table th:if="${actiondet}" class="table table-striped">
+									   			<table th:if="${idaction}" class="table table-striped">
 									   				<tr>
-									   					<th width="30%"> <label th:text=${actiondet.id}></label></th>
-									   					<th width="5%">participant</th>
-									   					<th width="20%">Nom</th>
-									   					<th width="20%">Direction</th>
-									   					<th width="20%">Grade</th>
+									   					<th width="20%"> cnrps</th>
+									   					<th width="30%">Nom</th>
+									   					<th width="10%">Tel</th>
+									   					<th width="30%">Direction</th>
+									   					<th width="30%">Grade</th>
 									   					
 									   				</tr>
 									   												   			
 									   				<tr th:each="i: ${listeutilisateur}" th:if="${listeutilisateur}">
-									   					<td><input type="text"  th:text="${i.cnrps}"/></td>
-									   					<td th:text="${i}"></td>
-									   					<td><input type="text"  th:text="${i.nom}"></td>
-									   					<td><input type="text" th:text="${i.direction.libeleFr}"></td>
-									   					<td><input type="text" th:text="${i.grade.libelleFr}"></td>
+									   					<td th:text="${i.cnrps}"></td>
+									   					<td th:text="${i.nom}"></td>
+									   					<td th:text="${i.tel}"></td>
+									   					<td th:text="${i.direction.libelleFr}"></td>
+									   					<td th:text="${i.grade.libelleFr}"></td>
 									   				
 									   				</tr>
 									   			

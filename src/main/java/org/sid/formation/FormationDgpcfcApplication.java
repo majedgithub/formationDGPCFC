@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class FormationDgpcfcApplication implements CommandLineRunner{
-/*
+
 	@Autowired
 	DirectionRepository directionRepository;
 	@Autowired
@@ -31,33 +31,33 @@ public class FormationDgpcfcApplication implements CommandLineRunner{
 	
 	@Autowired
 	EmployeRepository employeRepository;
-	*/
+	
 	public static void main(String[] args) {
 		SpringApplication.run(FormationDgpcfcApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-	/*	
+		/*
 		Direction d = directionRepository.save(new Direction("الإدارة العامة للمصالح المشتركة", "Direction Générale des Services Communs"));
 		Grade g = gradeRepository.save(new Grade("zzzz", "ingénieur principal"));
 		Fonctions f = fonctionRepository.save(new Fonctions("a", "chef service de la recherche"));
 		SousDirection sd= sousDirectionRepository.save(new SousDirection("دارة الشؤون اإلدارية", "la direction des affaires administratives", d));
 	
-		Formateur formmm = formateurRepository.save(new Formateur("09958877", "ben ali majed", "58516162", "nabeul", "formationtech"));
+		Formateur formmm = formateurRepository.save(new Formateur("09958877", "ben ali ", "58516162", "nabeul", "formationtech"));
 		
-		Employe emp = employeRepository.save(new Employe("984565", "985162", "malek", "aze", "8625", g, f, d));
+		Employe emp = employeRepository.save(new Employe("5555", "55555", "mimi", "aze", "8625", g, f, d));
 	    Set<Employe> employess = new HashSet<>();
 	    Set<Action> actions = new HashSet<>();
 	    employess.add(emp);
-		Action c = actionRepository.save(new Action("lotus", "app", "mehat", "b1", new Date(), 3.0, "ok", 45.0, 45.0, 90.0, "aaaaaaaa", 0, 14.0, 14.0, 28.0, formmm));
+		Action c = actionRepository.save(new Action("55555", "app", "mehat", "b1", new Date(), 3.0, "ok", 45.0, 45.0, 90.0, "aaaaaaaa", 0, 14.0, 14.0, 28.0, formmm));
 		actions.add(c);
 		
 		emp.setActions(actions);
 		c.setEmployes(employess);
 		
 		employeRepository.save(emp);
-		actionRepository.save(c);
-		*/
+		actionRepository.save(c);*/
+		
 	}
 }
