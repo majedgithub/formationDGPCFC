@@ -12,6 +12,6 @@ public interface EmployeRepository extends JpaRepository<Employe, Long>{
 	@Query("select e from Employe e where e.cnrps= :cnrpss")
 	public Employe findByCnrps(@Param("cnrpss") String cnrps);
 	
-	@Query("select s from Action s order by s.dateaction desc")
+	@Query("select s from Employe s order by s.nom desc")
 	public Page<Employe> listeEmployesPageable(Pageable pageeable);
 }

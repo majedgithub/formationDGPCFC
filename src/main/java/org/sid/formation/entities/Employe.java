@@ -26,7 +26,7 @@ public class Employe {
 	
 	@ManyToOne
 	@JoinColumn(name="CODE_DIRECTION")
-	private Direction direction;
+	private SousDirection direction;
 	
 	@ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -46,7 +46,7 @@ public class Employe {
 	
 
 	public Employe(String cnrps, String cin, String nom, String addresse, String tel, Grade grade, Fonctions fonctions,
-			Direction direction) {
+			SousDirection direction) {
 		super();
 		this.cnrps = cnrps;
 		this.cin = cin;
@@ -124,11 +124,11 @@ public class Employe {
 		this.fonctions = fonctions;
 	}
 
-	public Direction getDirection() {
+	public SousDirection getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Direction direction) {
+	public void setDirection(SousDirection direction) {
 		this.direction = direction;
 	}
 

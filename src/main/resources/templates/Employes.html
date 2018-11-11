@@ -11,14 +11,12 @@
 			<div class="mainpanel">
 		         <div class="contentpanel">
 		                        
-		            <div class="row row-stat">          
-		                    		                        
+		            <div class="row row-stat">                 
 							   <div class="col-md-9" >
-							
 								   	<div  class="panel panel-primary" style="margin-left: 15px;">
 								   		<div class="panel-heading">Liste des Employes </div>
 								   			<div class="panel-body">					   			
-								   		
+								   			<div th:if="${listEmployes}">
 								   			<table class="table table-striped">
 								   				<tr>
 								   					<th width="10%">Cnrps</th>
@@ -28,18 +26,18 @@
 								   					<th width="15%">Fonction</th>
 								   					<th width="15%">Direction</th>
 								   					<th width="10%">Tel</th>
-								   					<th width="10%"></th>
+								   					<th width="5%"></th>
 								   				</tr>
 								   				<tr th:each="o:${listEmployes}">
 								   				 	<td th:text="${o.cnrps}"></td>
 								   				 	<td th:text="${o.cin}"></td>
 								   				 	<td th:text="${o.nom}"></td>
 								   				 	<td th:text="${o.grade.libelleFr}"></td>
-								   				 	<td th:text="${o.fonction.libelleFr}"></td>
+								   				 	<td th:text="${o.fonctions.libelleFr}"></td>
 								   				 	<td th:text="${o.direction.libelleFr}"></td>
 								   				 	<td th:text="${o.tel}"></td>
 								   				 	<td>
-								   				 	<a th:href="@{/Formateur(edit = ${o.id})}">
+								   				 	<a th:href="@{/Employes(edit = ${o.id})}">
 													<img src="images/edit.png" width="30px" height="30px"></a>
 													</td>
 								   				</tr>
@@ -47,13 +45,13 @@
 								   			<div class="container">
 									   				<ul class="nav nav-pills">
 									   					<li th:each="p: ${#numbers.sequence(0,pages-1)}" >
-									   					<a th:href="@{/Formateur(page=${p})}" th:text="${p}"></a>
+									   					<a th:href="@{/Employes(page=${p})}" th:text="${p}"></a>
 									   					
 									   					</li>
 									   				</ul>
 									   			
 									   			</div>
-									   		
+									   		</div>
 								   		</div>
 								   	</div>
 							   
@@ -65,29 +63,71 @@
 				                                    <div class="panel-heading noborder">
 				                                      
 				                                        <div class="media-body">
-				                                            <h3 class="md-title nomargin">Ajouter Formateur : </h3></br>
+				                                            <h3 class="md-title nomargin">Ajouter Employe : </h3></br>
 				                                            	
-				                                            			<div th:if="!${formateur}">
-														   					<form th:action="@{/Formateur}" method="post">
+				                                            			<div th:if="!${Employe}">
+														   					<form th:action="@{/Employes}" method="post">
 														   					
-														   					<input class="form-control" type="text" id="cin" name=cin placeholder="cin...." required/></br>
+														   					<input class="form-control" type="text" id="cnrps" name="cnrps" placeholder="cnrps...." required/></br>
+														   					<input class="form-control" type="text" id="cin" name="cin" placeholder="cin...." required/></br>
 														   					<input class="form-control" type="text" id="nom" name="nom" placeholder="nom...." required/></br>
 														   					<input class="form-control" type="text" id="tel" name="tel" placeholder="tel..." required/></br>
 														   					<input class="form-control" type="text" id="addresse" name="addresse" placeholder="Addresse ..." required/></br>
-														   					<input class="form-control" type="text" id="bureau" name="bureau" placeholder="Bureau...." required/></br>
+														   					
+														   					<label for="sdirection" class="label label-success">Sous direction : </label>
+																			<select class="form-control" name="sdirection">
+																			    <option th:each="i : ${listSDirection}" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select></br>
+																			<label for="grade" class="label label-success">Grade : </label>
+																			<select class="form-control" name="grade">
+																			    <option th:each="i : ${listGrade}" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select></br>
+																			<label for="fonctions" class="label label-success">Fonction : </label>
+																			<select class="form-control" name="fonctions">
+																			    <option th:each="i : ${listFonction}" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select></br>
 														   					<input class="btn btn-primary" type="submit" value="Ajouter"/>
 														   					</form>
 														   					</div>
 														   					
-														   					<div th:if="${formateur}">
-														   					<form th:action="@{/Formateur}" method="post">
-														   					<input class="form-control" type="text" id="cin2" name="cin2" th:value="${formateur.cin}" required/></br>
-														   					<input class="form-control" type="text" id="nom" name="nom" th:value="${formateur.nom}"  required/></br>
-														   					<input class="form-control" type="text" id="tel" name="tel" th:value="${formateur.tel}"  required/></br>
-														   					<input class="form-control" type="text" id="addresse" name="addresse" th:value="${formateur.addresse}"  required/></br>
-														   					<input class="form-control" type="text" id="bureau" name="bureau" th:value="${formateur.bureau}"  required/></br>
-														   					<input type="hidden" name="saveedit" th:value="${formateur.id}">
-														   					<input class="btn btn-primary" type="submit" value="Ajouter"/>
+														   					<div th:if="${Employe}">
+														   					<form th:action="@{/Employes}" method="post">
+														   					
+														   					<label for="cnrps" class="label label-success">Cnrps : </label>
+														   					<input class="form-control" type="text" id="cnrps2" name="cnrps2" th:value="${Employe.cnrps}" required/></br>
+														   					
+														   					<label for="sdirection" class="label label-success">Cin : </label>
+														   					<input class="form-control" type="text" id="cin" name="cin" th:value="${Employe.cin}" required/></br>
+														   						
+														   					<label for="Nom" class="label label-success">Nom : </label>
+														   					<input class="form-control" type="text" id="nom" name="nom" th:value="${Employe.nom}"  required/></br>
+														   					
+														   					<label for="Tel" class="label label-success">Tel : </label>
+														   					<input class="form-control" type="text" id="tel" name="tel" th:value="${Employe.tel}"  required/></br>
+														   					
+														   					<label for="addresse" class="label label-success">Addresse : </label>
+														   					<input class="form-control" type="text" id="addresse" name="addresse" th:value="${Employe.addresse}"  required/></br>
+														   					
+														   					<label for="sdirection" class="label label-success">Sous direction : </label>
+																			<select class="form-control" name="sdirection">
+																			    <option th:each="i : ${listSDirection}" th:selected="(${i.id} == *{Employe.direction.id})" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select></br>
+																			<label for="grade" class="label label-success">Grade : </label>
+																			<select class="form-control" name="grade">
+																			    <option th:each="i : ${listGrade}" th:selected="(${i.id} == *{Employe.grade.id})" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select></br>
+																			<label for="fonctions" class="label label-success">Fonction : </label>
+																			<select class="form-control" name="fonctions">
+																			    <option th:each="i : ${listFonction}" th:selected="(${i.id} == *{Employe.fonctions.id})" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select></br>
+																			<input type="hidden" name="saveedit" th:value="${Employe.id}">
+														   					<input class="btn btn-primary" type="submit" value="Modifier"/>
 														   					</form>
 														   					</div>
 														   				

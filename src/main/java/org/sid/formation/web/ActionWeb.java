@@ -9,8 +9,14 @@ import java.util.Set;
 import org.sid.formation.dao.EmployeRepository;
 import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
+import org.sid.formation.entities.Fonctions;
 import org.sid.formation.entities.Formateur;
+import org.sid.formation.entities.Grade;
+import org.sid.formation.entities.SousDirection;
+import org.sid.formation.metier.IFonctions;
 import org.sid.formation.metier.IFormateur;
+import org.sid.formation.metier.IGrade;
+import org.sid.formation.metier.ISousDirection;
 import org.sid.formation.metier.Iaction;
 import org.sid.formation.metier.IemployeCTRL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +40,13 @@ public class ActionWeb {
 	IemployeCTRL iemploye;
 	
 	@Autowired
-	EmployeRepository iemployeRepo;
+	IGrade iGrade;
 	
 	@Autowired
-	PdfGenaratorUtil pdfGenaratorUtil;
+	ISousDirection iSousDirection;
+	
+	@Autowired
+	IFonctions iFonctions;
 	
 	@RequestMapping(value="/")
 	public String homef(Model model) throws Exception {
@@ -232,6 +241,8 @@ public class ActionWeb {
 			,@RequestParam(name="saveedit" , defaultValue="0") String saveedit) {
 		
 		if(!cin.equals("0")) {
+			
+			
 			Formateur f = new Formateur(cin, nom, tel, addresse, bureau);
 			iFormateur.AddFormateur(f);
 			
@@ -345,39 +356,61 @@ public class ActionWeb {
 	
 	@RequestMapping(value="/Employes")
 	public String GestionEmployes(Model model, @RequestParam(name="cin" , defaultValue="0") String cin
-			,@RequestParam(name="cin2" , defaultValue="0") String cin2
+			,@RequestParam(name="cnrps" , defaultValue="0") String cnrps
+			,@RequestParam(name="cnrps2" , defaultValue="0") String cnrps2
 			,@RequestParam(name="nom" , defaultValue="0") String nom
 			,@RequestParam(name="tel" , defaultValue="0") String tel
 			,@RequestParam(name="addresse" , defaultValue="0") String addresse
-			,@RequestParam(name="bureau" , defaultValue="0") String bureau
+			,@RequestParam(name="grade" , defaultValue="0") String grade
+			,@RequestParam(name="fonctions" , defaultValue="0") String fonctions
+			,@RequestParam(name="sdirection" , defaultValue="0") String sdirection
 			,@RequestParam(name="page" , defaultValue="0") int page
-			,@RequestParam(name="size" , defaultValue="7") int size
+			,@RequestParam(name="size" , defaultValue="6") int size
 			,@RequestParam(name="edit" , defaultValue="0") String edit
-			,@RequestParam(name="saveedit" , defaultValue="0") String saveedit) {
+			,@RequestParam(name="saveedit" , defaultValue="0") String saveedit) throws Exception {
 		
-		if(!cin.equals("0")) {
-			Formateur f = new Formateur(cin, nom, tel, addresse, bureau);
-			iFormateur.AddFormateur(f);
+		if(!cnrps.equals("0")) {
+			//Formateur f = new Formateur(cin, nom, tel, addresse, bureau);
+			//iFormateur.AddFormateur(f);
+			Employe NewEmp = new Employe(cnrps, cin, nom, addresse, tel, iGrade.GetGradeById(Long.parseLong(grade))
+					, iFonctions.GetFonctionById(Long.parseLong(fonctions)), iSousDirection.GetSousDirectionById(Long.parseLong(sdirection)));
+			iemploye.AjouterEmploye(NewEmp);
 			
 		}else if(!edit.equals("0")) {
+
 			long editt = Long.parseLong(edit);
-			Formateur f = iFormateur.getFormateur(editt);
-			model.addAttribute("formateur", f);
+			Employe employe = iemploye.ConsulterEmploye(editt);
+			model.addAttribute("Employe", employe);
 		}else if(!saveedit.equals("0")) {
-			long editt = Long.parseLong(saveedit);
-			Formateur f = iFormateur.getFormateur(editt);
 			
-			f.setCin(cin2);
-			f.setNom(nom);
-			f.setTel(tel);
-			f.setAddresse(addresse);
-			f.setBureau(bureau);
-			iFormateur.AddFormateur(f);
+			long editt = Long.parseLong(saveedit);
+			Employe employe = iemploye.ConsulterEmploye(editt);
+			
+			employe.setCnrps(cnrps2);
+			employe.setCin(cin);
+			employe.setAddresse(addresse);
+			employe.setNom(nom);
+			employe.setTel(tel);
+			employe.setFonctions(iFonctions.GetFonctionById(Long.parseLong(fonctions)));
+			employe.setDirection(iSousDirection.GetSousDirectionById(Long.parseLong(sdirection)));
+			employe.setGrade(iGrade.GetGradeById(Long.parseLong(grade)));
+			
+			
+			iemploye.AjouterEmploye(employe);
+			
 		}
 			Page<Employe> listEmployes = iemploye.listeEmploye(page, size);
 			int pages = listEmployes.getTotalPages();
 			model.addAttribute("listEmployes", listEmployes);
 			model.addAttribute("pages", pages);
+			
+			List<Grade> listGrade = iGrade.listGrades();
+			List<Fonctions> listFonction = 	iFonctions.listFonctions();
+			List<SousDirection> listSDirection = iSousDirection.listSousDirection();
+			
+			model.addAttribute("listGrade", listGrade);
+			model.addAttribute("listFonction", listFonction);
+			model.addAttribute("listSDirection", listSDirection);
 		
 		return "Employes";
 	}
