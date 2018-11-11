@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+  layout:decorate="~{template1}">
+<head>
+<meta charset="utf-8">
+<title>Formation DGPCFC</title>
+</head>
+<body>
+	<div layout:fragment="content">
+			<div class="mainpanel">
+		         <div class="contentpanel">
+		                        
+					            <div class="row row-stat">          	                        
+										   <div class="col-md-4" >
+											   	<div  class="panel panel-primary" style="margin-left: 15px;">
+											   		<div class="panel-heading">Recherche par action</div>
+											   		<div class="panel-body">
+											   		      <form th:action="@{/Recherche}" method="post">
+																		   					
+															<input class="form-control" type="text" id="intitulea" name="intitulea" placeholder="intitule......" /></br>
+															<input class="form-control" type="text" id="themea" name="themea" placeholder="theme......." /></br>
+															<input class="form-control" type="date" id="dateactiona" name="dateactiona" placeholder="dateaction....." /></br>
+															<input class="form-control" type="text" id="lieua" name="lieua" placeholder="lieu....." /></br>
+															<input class="form-control" type="text" id="bureaua" name="bureaua" placeholder="bureau......" /></br>
+															<input type="hidden" name="rech" value="recha"/>
+															<input class="btn btn-primary" type="submit" value="Chercher"/>
+														   
+														   </form>
+											   		      
+											   		</div>
+											   	</div>
+										   
+										   </div>
+										    <div class="col-md-4" >
+											   	<div  class="panel panel-default" style="margin-left: 15px;">
+											   		<div class="panel-heading">Recherche par Employe</div>
+											   		<div class="panel-body">
+											   		      	
+															<form th:action="@{/RechEmploye}" method="post">
+																		   					
+															<input class="form-control" type="text" id="cnrpse" name="cnrpse" placeholder="cnrps......" /></br>
+															<input class="form-control" type="text" id="nome" name="nome" placeholder="nom......." /></br>
+															<input class="form-control" type="text" id="directione" name="directione" placeholder="direction....." /></br>
+															<input class="form-control" type="text" id="fonctione" name="fonctione" placeholder="fonction...." /></br>
+															<input class="form-control" type="text" id="gradee" name="gradee" placeholder="grade......" /></br>
+															<input type="hidden" name="rech" value="reche"/>
+															<input class="btn btn-primary" type="submit" value="Chercher"/>
+														   
+														   </form>
+															
+											   		      
+											   		</div>
+											   	</div>
+										   
+										   </div>
+										   
+										     <div class="col-md-4" >
+											   	<div  class="panel panel-info" style="margin-right: 15px;">
+											   		<div class="panel-heading">Recherche par Formateur et Bureau</div>
+											   		<div class="panel-body">
+											   		      	<form th:action="@{/Recherche}" method="post">
+																		   					
+															<input class="form-control" type="text" id="cinf" name="cinf" placeholder="cin......" /></br>
+															<input class="form-control" type="text" id="nomf" name="nomf" placeholder="nom......." /></br>
+															<input class="form-control" type="text" id="bureauf" name="bureauf" placeholder="bureau....." /></br>
+															<input type="hidden" name="rech" value="rechf"/>
+															<input class="btn btn-primary" type="submit" value="Chercher"/>
+														   
+														   </form>
+											   		      
+											   		</div>
+											   	</div>
+										   
+										   </div>
+								 </div>	
+					 			<div class="row">
+								   	<div  class="panel panel-warning" style="margin-left: 15px;">
+								   		<div class="panel-heading">Liste des actions</div>
+								   		<div class="panel-body">
+								   		
+								   			<table class="table table-striped">
+								   				<tr>
+								   					<th width="25%">intitulé</th>
+								   					<th width="15%">Théme</th>
+								   					<th width="10%">date action</th>
+								   					<th width="5%">durée</th>
+								   					<th width="15%">lieu action</th>
+								   					<th width="15%">formateur</th>
+								   					<th width="15%">Bureau</th>
+								   					
+								   				</tr>
+								   				<tr th:each="o:${listeActions}">
+								   				 	<td th:text="${o.intitule}"></td>
+								   				 	<td th:text="${o.theme}"></td>
+								   				 	<td th:text="${#dates.format(o.dateaction, 'dd-MMM-yyyy')}"></td>
+								   				 	<td th:text="${o.duree}"></td>
+								   				 	<td th:text="${o.lieu}"></td>
+								   				 	<td th:text="${o.formateur.nom}"></td>
+								   				 	<td th:text="${o.bureau}"></td>
+								   				</tr>
+								   			</table>				   											   			
+								   		</div>
+								   			
+								   			
+								   		</div>
+								   		</div>
+						
+		         </div><!-- contentpanel -->
+		                    
+		      </div><!-- mainpanel -->
+	
+	</div>
+</body>
+</html>

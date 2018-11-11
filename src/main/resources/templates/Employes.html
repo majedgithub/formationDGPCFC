@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+  layout:decorate="~{template1}">
+<head>
+<meta charset="utf-8">
+<title>Formation DGPCFC</title>
+</head>
+<body>
+	<div layout:fragment="content">
+			<div class="mainpanel">
+		         <div class="contentpanel">
+		                        
+		            <div class="row row-stat">          
+		                    		                        
+							   <div class="col-md-9" >
+							
+								   	<div  class="panel panel-primary" style="margin-left: 15px;">
+								   		<div class="panel-heading">Liste des Employes </div>
+								   			<div class="panel-body">					   			
+								   		
+								   			<table class="table table-striped">
+								   				<tr>
+								   					<th width="10%">Cnrps</th>
+								   					<th width="10%">cin</th>
+								   					<th width="20%">Nom</th>
+								   					<th width="15%">Grade</th>
+								   					<th width="15%">Fonction</th>
+								   					<th width="15%">Direction</th>
+								   					<th width="10%">Tel</th>
+								   					<th width="10%"></th>
+								   				</tr>
+								   				<tr th:each="o:${listEmployes}">
+								   				 	<td th:text="${o.cnrps}"></td>
+								   				 	<td th:text="${o.cin}"></td>
+								   				 	<td th:text="${o.nom}"></td>
+								   				 	<td th:text="${o.grade.libelleFr}"></td>
+								   				 	<td th:text="${o.fonction.libelleFr}"></td>
+								   				 	<td th:text="${o.direction.libelleFr}"></td>
+								   				 	<td th:text="${o.tel}"></td>
+								   				 	<td>
+								   				 	<a th:href="@{/Formateur(edit = ${o.id})}">
+													<img src="images/edit.png" width="30px" height="30px"></a>
+													</td>
+								   				</tr>
+								   			</table>
+								   			<div class="container">
+									   				<ul class="nav nav-pills">
+									   					<li th:each="p: ${#numbers.sequence(0,pages-1)}" >
+									   					<a th:href="@{/Formateur(page=${p})}" th:text="${p}"></a>
+									   					
+									   					</li>
+									   				</ul>
+									   			
+									   			</div>
+									   		
+								   		</div>
+								   	</div>
+							   
+							   </div>
+								<div class="col-md-3">      
+									     
+									       <div class="row" style="margin-right: 15px;">
+				                                <div class="panel panel-success">
+				                                    <div class="panel-heading noborder">
+				                                      
+				                                        <div class="media-body">
+				                                            <h3 class="md-title nomargin">Ajouter Formateur : </h3></br>
+				                                            	
+				                                            			<div th:if="!${formateur}">
+														   					<form th:action="@{/Formateur}" method="post">
+														   					
+														   					<input class="form-control" type="text" id="cin" name=cin placeholder="cin...." required/></br>
+														   					<input class="form-control" type="text" id="nom" name="nom" placeholder="nom...." required/></br>
+														   					<input class="form-control" type="text" id="tel" name="tel" placeholder="tel..." required/></br>
+														   					<input class="form-control" type="text" id="addresse" name="addresse" placeholder="Addresse ..." required/></br>
+														   					<input class="form-control" type="text" id="bureau" name="bureau" placeholder="Bureau...." required/></br>
+														   					<input class="btn btn-primary" type="submit" value="Ajouter"/>
+														   					</form>
+														   					</div>
+														   					
+														   					<div th:if="${formateur}">
+														   					<form th:action="@{/Formateur}" method="post">
+														   					<input class="form-control" type="text" id="cin2" name="cin2" th:value="${formateur.cin}" required/></br>
+														   					<input class="form-control" type="text" id="nom" name="nom" th:value="${formateur.nom}"  required/></br>
+														   					<input class="form-control" type="text" id="tel" name="tel" th:value="${formateur.tel}"  required/></br>
+														   					<input class="form-control" type="text" id="addresse" name="addresse" th:value="${formateur.addresse}"  required/></br>
+														   					<input class="form-control" type="text" id="bureau" name="bureau" th:value="${formateur.bureau}"  required/></br>
+														   					<input type="hidden" name="saveedit" th:value="${formateur.id}">
+														   					<input class="btn btn-primary" type="submit" value="Ajouter"/>
+														   					</form>
+														   					</div>
+														   				
+														   		
+				                                        </div><!-- media-body -->
+				                                       
+				                                    </div><!-- panel-body -->
+				                                </div><!-- panel -->
+			                         	   </div><!-- col-md-4 -->
+									           
+			                            </div>
+		                            </div> 
+		                    
+	
+		                    </div><!-- contentpanel -->
+		                    
+		                </div><!-- mainpanel -->
+	
+</div>
+</body>
+</html>

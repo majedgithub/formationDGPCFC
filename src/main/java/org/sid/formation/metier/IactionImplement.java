@@ -1,7 +1,8 @@
 package org.sid.formation.metier;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,11 +26,11 @@ public class IactionImplement implements Iaction{
 	@Autowired
 	IemployeCTRL iemploye;
 	@Override
-	public Action ConsulterAction(Long id) throws Exception {
+	public Action ConsulterAction(Long id)  {
 		Action a = actionR.getOne(id);
-		
-		if(a == null) throw new Exception("action vide");
+		if(a == null) {return null;}else {
 		return a;
+		}
 	}
 
 	@Override
@@ -40,7 +41,6 @@ public class IactionImplement implements Iaction{
 
 	@Override
 	public Page<Action> listeActions(int page, int size) {
-		// TODO Auto-generated method stub
 		return actionR.listeActions(new PageRequest(page, size));
 	}
 
@@ -48,18 +48,6 @@ public class IactionImplement implements Iaction{
 	public Page<Action> listeActionsIntitule(String intitule,int page, int size) {
 		// TODO Auto-generated method stub
 		return actionR.listeActionsSearchIntitule(intitule,new PageRequest(page,size));
-	}
-
-	@Override
-	public Page<Action> listeActionsDate(Date dateaction,int page, int size) {
-		// TODO Auto-generated method stub
-		return actionR.listeActionsSearchDate(dateaction,new PageRequest(page,size));
-	}
-
-	@Override
-	public Page<Action> listeActionsIntituleDate(String intitule,Date dateaction,int page, int size) {
-		// TODO Auto-generated method stub
-		return actionR.listeActionsIntituleDate(intitule,dateaction,(new PageRequest(page,size)));
 	}
 
 	@Override
@@ -80,6 +68,37 @@ public class IactionImplement implements Iaction{
 			//Action a =AjouterAction(c);
 			
 			return c;
+	}
+
+	@Override
+	public Set<Action> ListActionByIntitule(String intiti) {
+		// TODO Auto-generated method stub
+		return actionR.GetListActionByIntitule(intiti);
+	}
+
+	@Override
+	public Set<Action> ListActionByTheme(String intiti) {
+		// TODO Auto-generated method stub
+		return actionR.GetListActionByTheme(intiti);
+	}
+
+	@Override
+	public Set<Action> ListActionByLieu(String intiti) {
+		// TODO Auto-generated method stub
+		return actionR.GetListActionByLieu(intiti);
+	}
+
+	@Override
+	public Set<Action> ListActionByActionDate(String intiti) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd"); 
+	    Date convertedDate = dateFormat.parse(intiti); 
+		return actionR.GetListActionByDate(convertedDate);
+	}
+
+	@Override
+	public Set<Action> ListActionByBureau(String intiti) {
+		// TODO Auto-generated method stub
+		return actionR.GetListActionByBureau(intiti);
 	}
 
 }

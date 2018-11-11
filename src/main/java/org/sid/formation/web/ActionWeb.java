@@ -1,13 +1,9 @@
 package org.sid.formation.web;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.sid.formation.dao.EmployeRepository;
@@ -24,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import groovy.util.logging.Log;
 
 @Controller
 public class ActionWeb {
@@ -61,27 +56,40 @@ public class ActionWeb {
 			model.addAttribute("countemploye", iemploye.NumbreEmploye());
 		
 		if(!(inputintitule.equals(" ")) ) {
-			Page<Action> listeActions = iaction.listeActionsIntitule(inputintitule,0,7);
-			int pages = listeActions.getTotalPages();
-				model.addAttribute("listeActions", listeActions);
-				model.addAttribute("pages", pages);
+			
+					Page<Action> listeActions = iaction.listeActionsIntitule(inputintitule,page,size);
+					int pages = listeActions.getTotalPages();
+					
 			}else {	
-		
-		Page<Action> listeActions = iaction.listeActions(page, size);
-		int pages = listeActions.getTotalPages();
-		model.addAttribute("listeActions", listeActions);
-		model.addAttribute("pages", pages);
+				Page<Action> listeActions = iaction.listeActions(page, size);
+			
+					int pages = listeActions.getTotalPages();
+					model.addAttribute("listeActions", listeActions);
+					model.addAttribute("pages", pages);
+			
 			}
 		return "home";
 	}
 	
 	@RequestMapping(value="/consulterAction")
-	public String consulterAction(Model model, @RequestParam(name="idac") Long idac) throws Exception {
+	public String consulterAction(Model model, @RequestParam(name="idac") Long idac){
+		try {
+			Action ac = iaction.ConsulterAction(idac);
+			Set<Employe> emps = ac.getEmployes();
+			
+			model.addAttribute("emps", emps);
+			if(ac.getIntitule().equals("")) {
+				model.addAttribute("actionvide", "vide");
+				}else {
+					model.addAttribute("action", ac);
+				}
+			if(emps.isEmpty()) {
+				model.addAttribute("listevide", "vide");
+				}
+		} catch (Exception e) {
+			model.addAttribute("exception", "pas d'action avec l'identifiant indiqué");
+		}
 		
-		Action ac = iaction.ConsulterAction(idac);
-		Set<Employe> emps = ac.getEmployes();
-		model.addAttribute("action", ac);
-		model.addAttribute("emps", emps);
 		return "consulteraction";
 	}
 	
@@ -92,12 +100,17 @@ public class ActionWeb {
 		
 		switch (op) {
 		case "G":
-			Action actiong = iaction.ConsulterAction(idc);
-			Set<Employe> emps = actiong.getEmployes();
-			model.addAttribute("actiong", actiong);
-			model.addAttribute("emps", emps);
-			model.addAttribute("generale", "ok");
-			break;
+			try {
+				Action actiong = iaction.ConsulterAction(idc);
+				Set<Employe> emps = actiong.getEmployes();
+				model.addAttribute("actiong", actiong);
+				model.addAttribute("emps", emps);
+				model.addAttribute("generale", "ok");
+				break;
+			} catch (Exception e) {
+				model.addAttribute("exception", "pas d'action trouvé avec l'identifiant demandé");
+			}
+		
 
 		case "E":
 			try {
@@ -112,7 +125,7 @@ public class ActionWeb {
 					model.addAttribute("single", "ok");
 				}
 			}catch(Exception e){
-				  
+				model.addAttribute("exception", "employe ou action incorrecte");
 			}
 			
 			break;
@@ -206,4 +219,166 @@ public class ActionWeb {
 		return "actionadd";
 	}
 	
+	@RequestMapping(value="/Formateur")
+	public String GestionFormateurs(Model model, @RequestParam(name="cin" , defaultValue="0") String cin
+			,@RequestParam(name="cin2" , defaultValue="0") String cin2
+			,@RequestParam(name="nom" , defaultValue="0") String nom
+			,@RequestParam(name="tel" , defaultValue="0") String tel
+			,@RequestParam(name="addresse" , defaultValue="0") String addresse
+			,@RequestParam(name="bureau" , defaultValue="0") String bureau
+			,@RequestParam(name="page" , defaultValue="0") int page
+			,@RequestParam(name="size" , defaultValue="7") int size
+			,@RequestParam(name="edit" , defaultValue="0") String edit
+			,@RequestParam(name="saveedit" , defaultValue="0") String saveedit) {
+		
+		if(!cin.equals("0")) {
+			Formateur f = new Formateur(cin, nom, tel, addresse, bureau);
+			iFormateur.AddFormateur(f);
+			
+		}else if(!edit.equals("0")) {
+			long editt = Long.parseLong(edit);
+			Formateur f = iFormateur.getFormateur(editt);
+			model.addAttribute("formateur", f);
+		}else if(!saveedit.equals("0")) {
+			long editt = Long.parseLong(saveedit);
+			Formateur f = iFormateur.getFormateur(editt);
+			
+			f.setCin(cin2);
+			f.setNom(nom);
+			f.setTel(tel);
+			f.setAddresse(addresse);
+			f.setBureau(bureau);
+			iFormateur.AddFormateur(f);
+		}
+			Page<Formateur> listFormateur = iFormateur.ListFormateurPages(page, size);
+			int pages = listFormateur.getTotalPages();
+			model.addAttribute("listFormateurs", listFormateur);
+			model.addAttribute("pages", pages);
+		
+		return "Formateurs";
+	}
+
+	@RequestMapping(value="/deleteformateur")
+	public String SupprimerFormateur(Model model, @RequestParam(name="idac", defaultValue="0") Long idac) {
+		
+		if(!idac.equals("0")) {
+				iFormateur.DeleteFormateur(idac);
+			
+		}else {
+			model.addAttribute("exception", "l'identificateur du formateur n'est pas définie");
+		}
+		return "redirect:/Formateurs";
+		
+	}
+	
+	
+	@RequestMapping(value="/Recherche")
+	public String chercher(Model model,@RequestParam(name="rech", defaultValue="0") String rechtype,
+			@RequestParam(name="cinf", defaultValue="0") String cinf,
+			@RequestParam(name="nomf", defaultValue="0") String nomf,
+			@RequestParam(name="bureauf", defaultValue="0") String bureauf,
+			
+			@RequestParam(name="cnrpse", defaultValue="0") String cnrpse,
+			@RequestParam(name="nome", defaultValue="0") String nome,
+			@RequestParam(name="directione", defaultValue="0") String directione,
+			@RequestParam(name="fonctione", defaultValue="0") String fonctione,
+			@RequestParam(name="gradee", defaultValue="0") String gradee,
+			
+			@RequestParam(name="intitulea", defaultValue="0") String intitulea,
+			@RequestParam(name="themea", defaultValue="0") String themea,
+			@RequestParam(name="dateactiona", defaultValue="0") String dateactiona,
+			@RequestParam(name="lieua", defaultValue="0") String lieua,
+			@RequestParam(name="bureaua", defaultValue="0") String bureaua) throws ParseException {
+		
+		switch(rechtype) {
+		case "0" : 
+			
+			break;
+		case "recha" : 
+			if(!intitulea.equals("0") && themea.equals("0") && dateactiona.equals("0") && lieua.equals("0") && bureaua.equals("0")) {
+				Set<Action> listeActions = iaction.ListActionByIntitule(intitulea);
+				model.addAttribute("listeActions", listeActions);
+				
+			}else if(intitulea.equals("0") && !themea.equals("0") && dateactiona.equals("0") && lieua.equals("0") && bureaua.equals("0")) {
+				Set<Action> listeActions = iaction.ListActionByTheme(themea);
+				model.addAttribute("listeActions", listeActions);
+				
+			}else if(intitulea.equals("0") && themea.equals("0") && !dateactiona.equals("0") && lieua.equals("0") && bureaua.equals("0")) {
+				Set<Action> listeActions = iaction.ListActionByActionDate(dateactiona);
+				model.addAttribute("listeActions", listeActions);
+			}
+			else if(intitulea.equals("0") && themea.equals("0") && dateactiona.equals("0") && !lieua.equals("0") && bureaua.equals("0")) {
+				Set<Action> listeActions = iaction.ListActionByLieu(lieua);
+				model.addAttribute("listeActions", listeActions);
+				
+			}else if(intitulea.equals("0") && themea.equals("0") && dateactiona.equals("0") && lieua.equals("0") && !bureaua.equals("0")) {
+				Set<Action> listeActions = iaction.ListActionByBureau(bureaua);
+				model.addAttribute("listeActions", listeActions);
+			}
+			break;
+			
+		case "reche" : 
+	
+			break;
+			
+		case "rechf" : 
+			
+			if(!cinf.equals("0") && nomf.equals("0") && bureauf.equals("0")) {
+				Set<Action> listeActions = iFormateur.ListActionByCinFormateur(cinf);
+				model.addAttribute("listeActions", listeActions);
+				
+			}else if(cinf.equals("0") && !nomf.equals("0") && bureauf.equals("0")) {
+				Set<Action> listeActions = iFormateur.ListActionByNomFormateur(nomf);
+				model.addAttribute("listeActions", listeActions);
+				
+			}else if(cinf.equals("0") && nomf.equals("0") && !bureauf.equals("0")) {
+				Set<Action> listeActions = iFormateur.ListActionByBureauFormateur(bureauf);
+				model.addAttribute("listeActions", listeActions);
+			}
+			
+			
+			break;
+		}
+		
+		return "recherche";
+	}
+	
+	@RequestMapping(value="/Employes")
+	public String GestionEmployes(Model model, @RequestParam(name="cin" , defaultValue="0") String cin
+			,@RequestParam(name="cin2" , defaultValue="0") String cin2
+			,@RequestParam(name="nom" , defaultValue="0") String nom
+			,@RequestParam(name="tel" , defaultValue="0") String tel
+			,@RequestParam(name="addresse" , defaultValue="0") String addresse
+			,@RequestParam(name="bureau" , defaultValue="0") String bureau
+			,@RequestParam(name="page" , defaultValue="0") int page
+			,@RequestParam(name="size" , defaultValue="7") int size
+			,@RequestParam(name="edit" , defaultValue="0") String edit
+			,@RequestParam(name="saveedit" , defaultValue="0") String saveedit) {
+		
+		if(!cin.equals("0")) {
+			Formateur f = new Formateur(cin, nom, tel, addresse, bureau);
+			iFormateur.AddFormateur(f);
+			
+		}else if(!edit.equals("0")) {
+			long editt = Long.parseLong(edit);
+			Formateur f = iFormateur.getFormateur(editt);
+			model.addAttribute("formateur", f);
+		}else if(!saveedit.equals("0")) {
+			long editt = Long.parseLong(saveedit);
+			Formateur f = iFormateur.getFormateur(editt);
+			
+			f.setCin(cin2);
+			f.setNom(nom);
+			f.setTel(tel);
+			f.setAddresse(addresse);
+			f.setBureau(bureau);
+			iFormateur.AddFormateur(f);
+		}
+			Page<Employe> listEmployes = iemploye.listeEmploye(page, size);
+			int pages = listEmployes.getTotalPages();
+			model.addAttribute("listEmployes", listEmployes);
+			model.addAttribute("pages", pages);
+		
+		return "Employes";
+	}
 }

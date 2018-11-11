@@ -9,6 +9,7 @@ import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -37,8 +38,8 @@ public class IemployeImplementation  implements IemployeCTRL{
 
 	@Override
 	public Page<Employe> listeEmploye(int page, int size) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return emp.listeEmployesPageable(new PageRequest(page, size));
 	}
 
 	@Override

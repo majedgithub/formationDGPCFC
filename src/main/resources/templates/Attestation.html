@@ -7,12 +7,13 @@
 
 <script>
 function f(){window.print();}
-
 </script>
 </head>
 <body onload="f()" style="margin-left: 0px;	margin-top: 0px; width: 90%; max-width: 1048px;">
 
-
+<div th:if="${exception}">
+<h2><label class="label label-warning" th:text="${exception}"></label></h2>
+</div>
 <div th:if="${single}">
 <img style="position:absolute;top:7.26in;left:11.84in;width:0.61in;height:0.90in" src="images/vi_1.png" />
 <img style="position:absolute;top:8.00in;left:11.61in;width:0.86in;height:0.77in" src="images/vi_2.png" />
