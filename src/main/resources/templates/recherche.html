@@ -37,13 +37,30 @@
 											   		<div class="panel-heading">Recherche par Employe</div>
 											   		<div class="panel-body">
 											   		      	
-															<form th:action="@{/RechEmploye}" method="post">
+															<form th:action="@{/Recherche}" method="get">
 																		   					
 															<input class="form-control" type="text" id="cnrpse" name="cnrpse" placeholder="cnrps......" /></br>
 															<input class="form-control" type="text" id="nome" name="nome" placeholder="nom......." /></br>
-															<input class="form-control" type="text" id="directione" name="directione" placeholder="direction....." /></br>
-															<input class="form-control" type="text" id="fonctione" name="fonctione" placeholder="fonction...." /></br>
-															<input class="form-control" type="text" id="gradee" name="gradee" placeholder="grade......" /></br>
+															
+															<label for="directione" class="label label-success">direction : </label>
+															<select class="form-control" name="directione">
+																				<option value="0">-----</option>
+																			    <option th:each="i : ${listSDirection}" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+															</select>
+																			<label for=""gradee"" class="label label-success">Grade : </label>
+																			<select class="form-control" name="gradee">
+																			<option value="0">-----</option>
+																			    <option th:each="i : ${listGrade}" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select>
+																			<label for="fonctione" class="label label-success">Fonction : </label>
+																			<select class="form-control" name="fonctione">
+																			<option value="0">-----</option>
+																			    <option th:each="i : ${listFonction}" th:value="${i.id}" th:text="${i.libelleFr}">
+																			    </option>
+																			</select>								
+															
 															<input type="hidden" name="rech" value="reche"/>
 															<input class="btn btn-primary" type="submit" value="Chercher"/>
 														   
@@ -76,10 +93,13 @@
 								 </div>	
 					 			<div class="row">
 								   	<div  class="panel panel-warning" style="margin-left: 15px;">
-								   		<div class="panel-heading">Liste des actions</div>
+								   		<div class="panel-heading">
+								   		Liste des actions 
+								   		<label th:if="${requetpour}"  th:text="${' pour ' +requetpour}"></label>
+								   		</div>
 								   		<div class="panel-body">
 								   		
-								   			<table class="table table-striped">
+								   			<table th:if="${listeActions}" class="table table-striped">
 								   				<tr>
 								   					<th width="25%">intitulé</th>
 								   					<th width="15%">Théme</th>
@@ -88,6 +108,7 @@
 								   					<th width="15%">lieu action</th>
 								   					<th width="15%">formateur</th>
 								   					<th width="15%">Bureau</th>
+								   					<th width="5%"></th>
 								   					
 								   				</tr>
 								   				<tr th:each="o:${listeActions}">
@@ -98,6 +119,7 @@
 								   				 	<td th:text="${o.lieu}"></td>
 								   				 	<td th:text="${o.formateur.nom}"></td>
 								   				 	<td th:text="${o.bureau}"></td>
+								   				 	<td><a  th:href="@{/consulterAction(idac = ${o.id})}"><img src="images/view.png" width="30px" height="30px"></a></td>
 								   				</tr>
 								   			</table>				   											   			
 								   		</div>

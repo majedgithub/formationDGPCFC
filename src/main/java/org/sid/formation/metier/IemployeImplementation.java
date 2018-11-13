@@ -7,6 +7,7 @@ import java.util.Set;
 import org.sid.formation.dao.EmployeRepository;
 import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
+import org.sid.formation.entities.SousDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,9 @@ public class IemployeImplementation  implements IemployeCTRL{
 
 	@Autowired
 	EmployeRepository emp;
+	
+	@Autowired
+	ISousDirection isousdirection;
 	
 	@Override
 	public Employe ConsulterEmploye(Long id) throws Exception {
@@ -73,6 +77,35 @@ public class IemployeImplementation  implements IemployeCTRL{
 	public Employe ConsulterEmployeByCnrps(String id) throws Exception {
 		// TODO Auto-generated method stub
 		return emp.findByCnrps(id);
+	}
+
+	@Override
+	public Set<Action> GetListActionByEmployeCnrps(String cnrps) {
+		
+		return emp.GetListActionByEmployeCnrps(cnrps);
+	}
+
+	@Override
+	public Set<Action> GetListActionByEmployeNom(String nom) {
+		// TODO Auto-generated method stub
+		return emp.GetListActionByEmployeNom(nom);
+	}
+
+	@Override
+	public Set<Action> GetListActionByEmployeDirection(long id) {
+		return emp.GetListActionByEmployeDirection(id);
+	}
+
+	@Override
+	public Set<Action> GetListActionByEmployeFonction(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Action> GetListActionByEmployeGrade(long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

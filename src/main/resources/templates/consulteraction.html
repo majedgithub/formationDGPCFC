@@ -18,6 +18,7 @@
 									   	<div  class="panel panel-primary">
 									   		<div class="panel-heading">Détails action</div>
 									   		<div  class="panel-body">
+									   		<div th:if="${exception}"><label th:text="${exception}"></label></div>
 									   			<div th:if="!${actionvide}" class="jumbotron">
 											      	<div class="form-label-group">
 											      	<div class="row">
@@ -100,7 +101,7 @@
 											      
 											      </div>
 											   <div th:if="!${listevide}">   
-									   			<h3>Liste des participants <a class="btn btn-primary"  th:href="@{/Attestation(ac = ${action.id}, op = 'G')}">Liste de presence</a></h3> 
+									   			<h3>Liste des participants <a sec:authorize="hasRole('ROLE_VALIDATEUR')" class="btn btn-primary"  th:href="@{/Attestation(ac = ${action.id}, op = 'G')}">Liste de presence</a></h3> 
 									   			
 									   			<table class="table table-striped">
 									   				<tr>
@@ -117,7 +118,7 @@
 										   				 	<td th:text="${o.direction.libelleFr}"></td>
 										   				 	<td th:text="${o.grade.libelleFr}"></td>
 										   				 	<td th:text="${o.fonctions.libelleFr}"></td>
-										   				 	<td><a class="btn btn-info" th:if="${o.id}" th:href="@{/Attestation(ac = ${action.id},emp = ${o.id}, op = 'E')}"> Attestation</a>
+										   				 	<td><a sec:authorize="hasRole('ROLE_VALIDATEUR')" class="btn btn-info" th:if="${o.id}" th:href="@{/Attestation(ac = ${action.id},emp = ${o.id}, op = 'E')}"> Attestation</a>
 										   				 	</td>
 								   				 	</tr>
 									   			</table>

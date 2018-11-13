@@ -1,6 +1,7 @@
 package org.sid.formation.metier;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.sid.formation.entities.Action;
 import org.sid.formation.entities.Employe;
@@ -16,4 +17,10 @@ public interface IemployeCTRL {
 	public Page<Employe> listeEmploye(int page, int size);
 	public void updateListeEmployeExcel(Collection<Employe> newEmp);
 	public Long NumbreEmploye();
+	
+	public Set<Action> GetListActionByEmployeCnrps(String cnrps);
+	public Set<Action> GetListActionByEmployeNom(String nom);
+	public Set<Action> GetListActionByEmployeDirection(long id);
+	public Set<Action> GetListActionByEmployeFonction(long id);
+	public Set<Action> GetListActionByEmployeGrade(long id);
 }

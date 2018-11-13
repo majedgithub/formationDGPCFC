@@ -48,13 +48,7 @@ public class ActionWeb {
 	@Autowired
 	IFonctions iFonctions;
 	
-	@RequestMapping(value="/")
-	public String homef(Model model) throws Exception {
-		
-		Employe emp = iemploye.ConsulterEmployeByCnrps("984565");
-		model.addAttribute("emp", emp);
-		return "qsd";
-	}
+
 	
 	@RequestMapping(value="/home")
 	public String accueil(Model model,@RequestParam(name="page", defaultValue="0") int page,
@@ -68,6 +62,8 @@ public class ActionWeb {
 			
 					Page<Action> listeActions = iaction.listeActionsIntitule(inputintitule,page,size);
 					int pages = listeActions.getTotalPages();
+					model.addAttribute("listeActions", listeActions);
+					model.addAttribute("pages", pages);
 					
 			}else {	
 				Page<Action> listeActions = iaction.listeActions(page, size);
@@ -81,13 +77,16 @@ public class ActionWeb {
 	}
 	
 	@RequestMapping(value="/consulterAction")
-	public String consulterAction(Model model, @RequestParam(name="idac") Long idac){
-		try {
+	public String consulterAction(Model model, @RequestParam(name="idac") Long idac
+			, @RequestParam(name="edit",defaultValue="0") String edit){
+	
+		if(edit.equals("0")) {
+			
 			Action ac = iaction.ConsulterAction(idac);
 			Set<Employe> emps = ac.getEmployes();
-			
 			model.addAttribute("emps", emps);
-			if(ac.getIntitule().equals("")) {
+			
+			if(ac.getIntitule().length()< 1) {
 				model.addAttribute("actionvide", "vide");
 				}else {
 					model.addAttribute("action", ac);
@@ -95,8 +94,19 @@ public class ActionWeb {
 			if(emps.isEmpty()) {
 				model.addAttribute("listevide", "vide");
 				}
-		} catch (Exception e) {
-			model.addAttribute("exception", "pas d'action avec l'identifiant indiqué");
+			
+		}else {
+			Action ac = iaction.ConsulterAction(idac);
+			Set<Employe> emps = ac.getEmployes();
+			model.addAttribute("emps", emps);
+			if(ac.getIntitule().length()< 1) {
+				model.addAttribute("actionvide", "vide");
+				}else {
+					model.addAttribute("action", ac);
+				}
+			if(emps.isEmpty()) {
+				model.addAttribute("listevide", "vide");
+				}
 		}
 		
 		return "consulteraction";
@@ -301,6 +311,15 @@ public class ActionWeb {
 			@RequestParam(name="lieua", defaultValue="0") String lieua,
 			@RequestParam(name="bureaua", defaultValue="0") String bureaua) throws ParseException {
 		
+		List<Grade> listGrade = iGrade.listGrades();
+		List<Fonctions> listFonction = 	iFonctions.listFonctions();
+		List<SousDirection> listSDirection = iSousDirection.listSousDirection();
+		
+		model.addAttribute("listGrade", listGrade);
+		model.addAttribute("listFonction", listFonction);
+		model.addAttribute("listSDirection", listSDirection);
+	
+		
 		switch(rechtype) {
 		case "0" : 
 			
@@ -309,27 +328,58 @@ public class ActionWeb {
 			if(!intitulea.equals("0") && themea.equals("0") && dateactiona.equals("0") && lieua.equals("0") && bureaua.equals("0")) {
 				Set<Action> listeActions = iaction.ListActionByIntitule(intitulea);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " l'action : " + intitulea);
 				
 			}else if(intitulea.equals("0") && !themea.equals("0") && dateactiona.equals("0") && lieua.equals("0") && bureaua.equals("0")) {
 				Set<Action> listeActions = iaction.ListActionByTheme(themea);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " le théme : " + themea);
 				
 			}else if(intitulea.equals("0") && themea.equals("0") && !dateactiona.equals("0") && lieua.equals("0") && bureaua.equals("0")) {
 				Set<Action> listeActions = iaction.ListActionByActionDate(dateactiona);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " la date : " + dateactiona);
 			}
 			else if(intitulea.equals("0") && themea.equals("0") && dateactiona.equals("0") && !lieua.equals("0") && bureaua.equals("0")) {
 				Set<Action> listeActions = iaction.ListActionByLieu(lieua);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " le lieu : " + lieua);
 				
 			}else if(intitulea.equals("0") && themea.equals("0") && dateactiona.equals("0") && lieua.equals("0") && !bureaua.equals("0")) {
 				Set<Action> listeActions = iaction.ListActionByBureau(bureaua);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " le bureau : " + bureaua);
 			}
 			break;
 			
 		case "reche" : 
 	
+			if(!cnrpse.equals("0") && nome.equals("0") && directione.equals("0") && fonctione.equals("0") && gradee.equals("0")) {
+				Set<Action> listeActions = iemploye.GetListActionByEmployeCnrps(cnrpse);
+				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " l'identifiant de l'employe : " + cnrpse);
+				
+			}else if(cnrpse.equals("0") && !nome.equals("0") && directione.equals("0") && fonctione.equals("0") && gradee.equals("0")) {
+				Set<Action> listeActions = iemploye.GetListActionByEmployeNom(nome);
+				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " nom de l'employe : " + nome);
+				
+			}else if(cnrpse.equals("0") && nome.equals("0") && !directione.equals("0") && fonctione.equals("0") && gradee.equals("0")) {
+				Set<Action> listeActions = iemploye.GetListActionByEmployeDirection(Long.parseLong(directione));
+				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " direction : ");
+			}
+			else if(cnrpse.equals("0") && nome.equals("0") && directione.equals("0") && !fonctione.equals("0") && gradee.equals("0")) {
+				Set<Action> listeActions = iemploye.GetListActionByEmployeFonction(Long.parseLong(fonctione));
+				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", "  Fonction  ");
+				
+			}else if(cnrpse.equals("0") && nome.equals("0") && directione.equals("0") && fonctione.equals("0") && !gradee.equals("0")) {
+				Set<Action> listeActions = iemploye.GetListActionByEmployeGrade(Long.parseLong(gradee));
+				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " grade : ");
+			}
+			
 			break;
 			
 		case "rechf" : 
@@ -337,14 +387,17 @@ public class ActionWeb {
 			if(!cinf.equals("0") && nomf.equals("0") && bureauf.equals("0")) {
 				Set<Action> listeActions = iFormateur.ListActionByCinFormateur(cinf);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " le cin de formateur : " + cinf);
 				
 			}else if(cinf.equals("0") && !nomf.equals("0") && bureauf.equals("0")) {
 				Set<Action> listeActions = iFormateur.ListActionByNomFormateur(nomf);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " le nom fu formateur : " + nomf);
 				
 			}else if(cinf.equals("0") && nomf.equals("0") && !bureauf.equals("0")) {
 				Set<Action> listeActions = iFormateur.ListActionByBureauFormateur(bureauf);
 				model.addAttribute("listeActions", listeActions);
+				model.addAttribute("requetpour", " le bureau : " + bureauf);
 			}
 			
 			

@@ -13,9 +13,12 @@
 			<div class="container-fluid">
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/home}">Actions</a></li>
-					<li><a th:href="@{/Employes}">Employes</a></li>
-					<li><a th:href="@{/Formateur}">Formateurs</a></li>
-					<li><a th:href="@{/Recherche}">Recherche</a></li>
+					
+					<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/Employes}">Employes</a></li>
+					<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/Formateur}">Formateurs</a></li>
+					
+					<li sec:authorize="hasRole('ROLE_VALIDATEUR')"><a th:href="@{/Recherche}">Recherche</a></li>
+					
 				</ul>
 				<ul class="nav navbar navbar-right">
 					<li><a th:href="@{/login?logout}">Logout</a></li>

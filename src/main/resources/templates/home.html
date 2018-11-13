@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
   layout:decorate="~{template1}">
 <head>
 <meta charset="utf-8">
@@ -18,11 +18,11 @@
 								   		<div class="panel-heading">Liste des actions</div>
 								   		<div class="panel-body">
 								   		<div th:if="${ooo}"><label th:text="${ooo}"></label></div>
-								   			<div class="row">
+								   			<div class="row" >
 									   			<div class="col-md-10"></div>
 									   			<div class="col-md-2">  
 									   			<a th:href="@{/actionadda}" class="btn btn-info">Ajouter action</a>
-								   			</div>
+								   			   </div>
 								   											   			
 								   			</div>
 								   			<table class="table table-striped">
@@ -41,10 +41,10 @@
 								   				 	<td th:text="${o.lieu}"></td>
 								   				 	<td th:text="${o.formateur.nom}"></td>
 								   				 	<td><a  th:href="@{/consulterAction(idac = ${o.id})}"><img src="images/view.png" width="30px" height="30px"></a>
-								   				 	<a th:href="@{/consulterAction(idac = ${o.id})}"><img src="images/edit.png" width="30px" height="30px"></a></td>
+								   				 	<a sec:authorize="hasRole('ROLE_VALIDATEUR')" th:href="@{/consulterAction(idac = ${o.id})}"><img src="images/edit.png" width="30px" height="30px"></a></td>
 								   				</tr>
 								   			</table>
-								   				<div class="container">
+								   				<div th:if="${pages}" class="container">
 									   				<ul class="nav nav-pills">
 									   					<li th:each="p: ${#numbers.sequence(0,pages-1)}" >
 									   					<a th:href="@{/home(page=${p})}" th:text="${p}"></a>
