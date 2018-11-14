@@ -21,85 +21,177 @@
 									   		<div th:if="${exception}"><label th:text="${exception}"></label></div>
 									   			<div th:if="!${actionvide}" class="jumbotron">
 											      	<div class="form-label-group">
-											      	<div class="row">
-											      	<div class="col-md-5">
-											      		
-														<label class="label label-success">intitulé</label>
-														<label class="form-control" th:text="${action.intitule}"></label>
-														
-														<label for="inputtheme" class="label label-success">Théme</label>
-														<label class="form-control" th:text="${action.intitule}"></label>
-														
-														<label for="inputdate" class="label label-success">date action</label>
-														<label class="form-control" th:text="${action.dateaction}"></label>														
-														
-														<label for="inputduree" class="label label-success">durée</label>
-														<label class="form-control" th:text="${action.duree +' jours'}"></label>
-														
-														<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
-														<label class="form-control" th:text="${action.sousparag}"></label>
+													     <div class="row">
+													      	<div th:if="!${showinput}" >
+													      	<div class="col-md-5">
+													      		
+																<label class="label label-success">intitulé</label>
+																<label class="form-control" th:text="${action.intitule}"></label>
+																
+																<label for="inputtheme" class="label label-success">Théme</label>
+																<label class="form-control" th:text="${action.intitule}"></label>
+																
+																<label for="inputdate" class="label label-success">date action</label>
+																<label class="form-control" th:text="${action.dateaction}"></label>														
+																
+																<label for="inputduree" class="label label-success">durée</label>
+																<label class="form-control" th:text="${action.duree +' jours'}"></label>
+																
+																<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
+																<label class="form-control" th:text="${action.sousparag}"></label>
+																	
+																<label for="inputavis" class="label label-success">Avis</label>
+																<label class="form-control" th:text="${action.avis}"></label>
+																
+																<label for="inputlieu" class="label label-success">Lieu</label>
+													      		<label class="form-control" th:text="${action.lieu}"></label>		      		
+													      	</div>
+													      											      	
+													      	<div class="col-md-1"></div>
+													      	<div class="col-md-5">
+													      	
+																<div class="panel panel-danger">
+																	<h3><label class="label label-primary">cout dépence:</label></h3>
+																	<div class="row">
+																		<div class="col-md-4">
+																		<label for="inputorgc">organisation</label>
+																		<label class="form-control" th:text="${action.organisationc}"></label>
+																		</div>
+																		<div class="col-md-4">
+																		<label for="inputanc">animation</label>
+																		<label class="form-control" th:text="${action.animationc}"></label>
+																		</div>
+																		<div class="col-md-4">
+																		<label for="inputtotalcop">total</label>
+																		<label class="form-control" th:text="${action.totalec + ' dt'}"></label>
+																		</div>
+																	</div>
+																</div>
 															
-														<label for="inputavis" class="label label-success">Avis</label>
-														<label class="form-control" th:text="${action.avis}"></label>
-														
-														<label for="inputlieu" class="label label-success">Lieu</label>
-											      		<label class="form-control" th:text="${action.lieu}"></label>		      		
-											      	</div>
-											      											      	
-											      	<div class="col-md-1"></div>
-											      	<div class="col-md-5">
-											      	
-														<div class="panel panel-danger">
-															<h3><label class="label label-primary">cout dépence:</label></h3>
-															<div class="row">
-																<div class="col-md-4">
-																<label for="inputorgc">organisation</label>
-																<label class="form-control" th:text="${action.organisationc}"></label>
+																<label for="inputavis" class="label label-success">Etat</label>
+																<label class="form-control" th:text="${action.etat}"></label>	
+																
+																
+																
+																<label for="inputavis" class="label label-success">Formateur</label>
+																<label class="form-control" th:text="${action.formateur.nom + ' (bureau : ' + action.formateur.bureau + ')'}"></label>	
+																
+																
+																<div class="panel panel-danger">
+																	<h3><label class="label label-primary">cout copération:</label></h3>
+																	<div class="row">
+																		<div class="col-md-4">
+																		<label for="inputid">organisation</label>
+																		<label class="form-control" th:text="${action.organisationcop}"></label>
+																		</div>
+																		<div class="col-md-4">
+																		<label for="inputid">animation</label>
+																		<label class="form-control" th:text="${action.animationcop}"></label>
+																		</div>
+																		<div class="col-md-4">
+																		<label for="inputid">total</label>
+																		<label class="form-control" th:text="${action.totalecop + ' dt'}"></label>
+																		</div>
+																	</div>
 																</div>
-																<div class="col-md-4">
-																<label for="inputanc">animation</label>
-																<label class="form-control" th:text="${action.animationc}"></label>
+																      		
+													      	</div>
+													      	</div>
+													      	
+														     
+																<div th:if="${showinput}" >
+																<form th:action="@{/actionadda}" method="post">
+													      		<div class="col-md-5">
+													      	
+													        	 <label  class="label label-success" th:text="${test}"></label>
+													      		 <label for="inputintitule" class="label label-success">Intitulé</label>
+													      		 <input class="form-control" name="inputintitule" type="text" th:value="${action.intitule}" required><br>
+													      		 	
+																
+																<label for="inputtheme" class="label label-success">Théme</label>
+																<input class="form-control" name="inputtheme" type="text" th:value="${action.theme}"  required><br>
+															
+																<label for="inputdate" class="label label-success">date action</label>
+													      		 <input class="form-control" name="inputdate" type="text" th:value="${action.dateaction}"  required><br>
+																
+																<label for="inputduree" class="label label-success">durée</label>
+													      		 <input class="form-control" name="inputduree" type="number" th:value="${action.duree}"  required><br>
+																
+																<label for="inputsousparag" class="label label-success">Sous paragraphe</label>
+													      		 <input class="form-control" name="inputsousparag" type="text" th:value="${action.sousparag}"  required><br>
+																	
+																<label for="inputavis" class="label label-success">Avis</label>
+													      		 <input class="form-control" name="inputavis" type="text" th:value="${action.avis}"  required><br>
+													      		 
+													      		 <label for="inputbureau" class="label label-success">Bureau</label>
+													      		 <input class="form-control" name="inputbureau" type="text" th:value="${action.bureau}"  required><br>
+													      	</div>
+													      											      	
+													      	<div class="col-md-1"></div>
+													      	<div class="col-md-5">
+													      	<label for="inputlieu" class="label label-success">Lieu</label>
+													      		 <input class="form-control" name="inputlieu" type="text" th:value="${action.lieu}"  required><br>
+																
+																<div class="panel panel-danger">
+																	<h3><label class="label label-primary">cout dépense:</label></h3>
+																	<div class="row">
+																		<div class="col-md-6">
+																		<label for="inputorgc">organisation</label>
+													      		        <input class="form-control" name="inputorgc" type="number" th:value="${action.animationc}"  required><br>
+																		</div>
+																		<div class="col-md-6">
+																		<label for="inputanc">animation</label>
+													      				 <input class="form-control" name="inputanc" type="number" th:value="${action.organisationc}"  required><br>
+																		</div>
+																		
+																	</div>
+																	<div class="row">
+																		<div class="col-md-12">
+																		<label >cout totale : </label>
+																		<label th:text="${action.totalec}"></label>
+																		</div>
+																	
+																	</div>
 																</div>
-																<div class="col-md-4">
-																<label for="inputtotalcop">total</label>
-																<label class="form-control" th:text="${action.totalec + ' dt'}"></label>
+															
+																<label for="inputformateur" class="label label-success">Formateur</label>
+																
+																<select class="form-control" name="inputformateur">
+																    <option th:each="i : ${listFormateur}" th:selected="(${i.id} == *{action.formateur.id})" th:value="${i.id}" th:text="${action.formateur.nom}">
+																    </option>
+																</select>
+																<div class="panel panel-danger">
+																	<h3><label class="label label-primary">cout copération:</label></h3>
+																	<div class="row">
+																		<div class="col-md-6">
+																		<label for="inputorgcop">organisation</label>
+													      		 		<input class="form-control" name="inputorgcop" type="number" th:value="${action.organisationcop}" ><br>
+																		</div>
+																		<div class="col-md-6">
+																		<label for="inputanimationcop">animation</label>
+													      				 <input class="form-control" name="inputanimationcop" type="number" th:value="${action.animationcop}"  ><br>
+																		</div>
+																		
+																	</div>
+																	<div th:if="${action.totalecop}" class="row">
+																		<div class="col-md-12">
+																		<label >cout totale de coopération: </label>
+																		<label th:text="${action.totalecop}"></label>
+																		</div>
+																	<input type="hidden" name="edit" th:value="${action.id}">
+																	</div>
 																</div>
-															</div>
-														</div>
-													
-														<label for="inputavis" class="label label-success">Etat</label>
-														<label class="form-control" th:text="${action.etat}"></label>	
-														
-														
-														
-														<label for="inputavis" class="label label-success">Formateur</label>
-														<label class="form-control" th:text="${action.formateur.nom + ' (bureau : ' + action.formateur.bureau + ')'}"></label>	
-														
-														
-														<div class="panel panel-danger">
-															<h3><label class="label label-primary">cout copération:</label></h3>
-															<div class="row">
-																<div class="col-md-4">
-																<label for="inputid">organisation</label>
-																<label class="form-control" th:text="${action.organisationcop}"></label>
+																<div class="row">
+																 <input type="submit" class="btn btn-primary">
 																</div>
-																<div class="col-md-4">
-																<label for="inputid">animation</label>
-																<label class="form-control" th:text="${action.animationcop}"></label>
-																</div>
-																<div class="col-md-4">
-																<label for="inputid">total</label>
-																<label class="form-control" th:text="${action.totalecop + ' dt'}"></label>
-																</div>
-															</div>
-														</div>
-														      		
-											      	</div>
-											      	</div>
-												        
-												      </div>
+																      		
+													      	</div>
+														        </form>
+														      </div>
+														 </div>
 											      
 											      </div>
+											    </div>
 											   <div th:if="!${listevide}">   
 									   			<h3>Liste des participants <a sec:authorize="hasRole('ROLE_VALIDATEUR')" class="btn btn-primary"  th:href="@{/Attestation(ac = ${action.id}, op = 'G')}">Liste de presence</a></h3> 
 									   			

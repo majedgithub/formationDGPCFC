@@ -41,7 +41,7 @@
 								   				 	<td th:text="${o.lieu}"></td>
 								   				 	<td th:text="${o.formateur.nom}"></td>
 								   				 	<td><a  th:href="@{/consulterAction(idac = ${o.id})}"><img src="images/view.png" width="30px" height="30px"></a>
-								   				 	<a sec:authorize="hasRole('ROLE_VALIDATEUR')" th:href="@{/consulterAction(idac = ${o.id})}"><img src="images/edit.png" width="30px" height="30px"></a></td>
+								   				 	<a sec:authorize="hasRole('ROLE_VALIDATEUR')" th:href="@{/consulterAction(idac = ${o.id}, edit=${o.intitule})}"><img src="images/edit.png" width="30px" height="30px"></a></td>
 								   				</tr>
 								   			</table>
 								   				<div th:if="${pages}" class="container">

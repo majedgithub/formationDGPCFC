@@ -35,7 +35,7 @@
 														<select class="form-control" name="inputtheme">
 															<option>Informatique</option>
 															 <option>Multimédia</option>
-															 <option>DOmaine routiére</option>
+															 <option>Domaine routiére</option>
 															 <option>Administratif</option>
 															 <option>Juridique</option>
 														</select><br>
@@ -180,7 +180,6 @@
 												      </div>
 											    </div>
 											 </form> 
-											 <div th:if="${t}" th:text="${t}"></div>
 											
 											 	<div th:if="${idaction}"  class="panel panel-warning">
 											   		<div class="panel-heading">Ajouter un employe à l'action <label th:text="${idaction}"></label></div>
@@ -201,7 +200,7 @@
 									  
 									   			<table th:if="${idaction}" class="table table-striped">
 									   				<tr>
-									   					<th width="20%"> cnrps</th>
+									   					<th width="10%"> cnrps</th>
 									   					<th width="30%">Nom</th>
 									   					<th width="10%">Tel</th>
 									   					<th width="30%">Direction</th>

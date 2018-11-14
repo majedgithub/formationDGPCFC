@@ -98,15 +98,11 @@ public class ActionWeb {
 		}else {
 			Action ac = iaction.ConsulterAction(idac);
 			Set<Employe> emps = ac.getEmployes();
+
+			model.addAttribute("action", ac);
 			model.addAttribute("emps", emps);
-			if(ac.getIntitule().length()< 1) {
-				model.addAttribute("actionvide", "vide");
-				}else {
-					model.addAttribute("action", ac);
-				}
-			if(emps.isEmpty()) {
-				model.addAttribute("listevide", "vide");
-				}
+			model.addAttribute("showinput", "ok");
+
 		}
 		
 		return "consulteraction";
@@ -158,26 +154,26 @@ public class ActionWeb {
 	}
 	
 	@RequestMapping(value="/actionadda")
-	public String ActionAdda(Model model ,@RequestParam(name="inputintitule", defaultValue = "o") String inputintitule
-			,@RequestParam(name="inputtheme", defaultValue = "") String inputtheme
+	public String ActionAdda(Model model ,@RequestParam(name="inputintitule", defaultValue = "0") String inputintitule
+			,@RequestParam(name="inputtheme", defaultValue = "0") String inputtheme
 			,@RequestParam(name="inputdate", defaultValue = "29-Apr-2010,13:00:14 PM") String inputdate
-			,@RequestParam(name="inputduree", defaultValue = "") Double inputduree
-			,@RequestParam(name="inputsousparag", defaultValue = "") String inputsousparag
-			,@RequestParam(name="inputlieu", defaultValue = "") String inputlieu
-			,@RequestParam(name="inputavis", defaultValue = "") String inputavis
-			,@RequestParam(name="inputorgc", defaultValue = "") Double inputorgc
-			,@RequestParam(name="inputanc", defaultValue = "") Double inputanc
-			,@RequestParam(name="inputformateur", defaultValue = "") String inputformateur
+			,@RequestParam(name="inputduree", defaultValue = "0") Double inputduree
+			,@RequestParam(name="inputsousparag", defaultValue = "0") String inputsousparag
+			,@RequestParam(name="inputlieu", defaultValue = "0") String inputlieu
+			,@RequestParam(name="inputavis", defaultValue = "0") String inputavis
+			,@RequestParam(name="inputorgc", defaultValue = "0") Double inputorgc
+			,@RequestParam(name="inputanc", defaultValue = "0") Double inputanc
+			,@RequestParam(name="inputformateur", defaultValue = "0") String inputformateur
 			,@RequestParam(name="inputorgcop", defaultValue = "0") Double inputorgcop
 			,@RequestParam(name="inputanimationcop", defaultValue = "0") Double inputanimationcop
-			,@RequestParam(name="inputbureau", defaultValue = "") String inputbureau) throws Exception {
+			,@RequestParam(name="inputbureau", defaultValue = "0") String inputbureau
+			,@RequestParam(name="edit", defaultValue = "0") String edit) throws Exception {
 		
 			model.addAttribute("addactionpage", "true");
 			model.addAttribute("showinput", "true");
 		
-		if(!inputintitule.equals("o")) {
+		if(!inputintitule.equals("0") && edit.equals("0")) {
 			
-			try {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd"); 
 			    Date convertedDate = dateFormat.parse(inputdate); 
 				Double tot1 = inputorgc + inputanc;
@@ -185,7 +181,9 @@ public class ActionWeb {
 				long form = Integer.parseInt(inputformateur);
 				Formateur f = iFormateur.getFormateur(form);
 				
-					Action act = new Action(inputintitule, inputtheme, inputlieu, inputbureau, convertedDate, inputduree, inputavis, inputanc, inputorgc, tot1, inputsousparag, 1, inputanimationcop, inputorgcop, tot2, f);
+					Action act = new Action(inputintitule, inputtheme, inputlieu, inputbureau, 
+							convertedDate, inputduree, inputavis, inputanc, inputorgc, tot1, inputsousparag,
+							1, inputanimationcop, inputorgcop, tot2, f);
 
 					Action news = iaction.AjouterAction(act);
 					model.addAttribute("actiondet", news);
@@ -193,11 +191,55 @@ public class ActionWeb {
 					model.addAttribute("showinput", null);
 					model.addAttribute("showlabel", "true");
 
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
 					
-		}else {
+		}else if(!inputintitule.equals("0") && !edit.equals("0")) {
+						
+				Action act = iaction.ConsulterAction(Long.parseLong(edit));
+
+				if(!act.getIntitule().equals("inputintitule")) {act.setIntitule(inputintitule);}
+				if(!act.getTheme().equals("inputtheme")) {act.setIntitule(inputtheme);}
+				if(!act.getLieu().equals("inputlieu")) {act.setLieu(inputlieu);}
+				if(!act.getBureau().equals("inputbureau")) {act.setBureau(inputbureau);}
+				if(!act.getDateaction().equals("inputdate")) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd"); 
+				    Date convertedDate = dateFormat.parse(inputdate);
+					act.setDateaction(convertedDate);;
+					}
+				if( (!(act.getAnimationc() == inputanc) ) || ( !(act.getOrganisationc() == inputorgc ))) 
+					{
+					Double tot1 = inputorgc + inputanc;
+					act.setAnimationc(inputanc);
+					act.setOrganisationc(inputorgc);
+					act.setTotalec(tot1);
+					
+					}
+				if( (!(act.getAnimationcop() == inputanimationcop) ) || ( !(act.getOrganisationcop() == inputorgcop ))) 
+				{
+					Double tot2 = inputorgcop + inputanimationcop;
+					act.setAnimationcop(inputanimationcop);
+					act.setOrganisationcop(inputorgcop);
+					act.setTotalecop(tot2);
+				
+				}
+				int idf = Integer.parseInt(inputformateur);
+				if( !((act.getFormateur().getId()) == (idf)) ) 
+					{
+						Formateur f = iFormateur.getFormateur(idf);
+						act.setFormateur(f);
+					}
+				if(!act.getAvis().equals("inputavis")) {act.setAvis(inputavis);}
+				if( !( act.getDuree() == inputduree) ) {act.setDuree(inputduree);}
+				if(!act.getSousparag().equals("inputsousparag")) {act.setSousparag(inputsousparag);}
+				
+				Action news = iaction.AjouterAction(act);
+				model.addAttribute("actiondet", news);
+				model.addAttribute("idaction", news.getId());
+				model.addAttribute("showinput", null);
+				model.addAttribute("showlabel", "true");
+				List<Formateur> listFormateur = iFormateur.ListFormateur();
+				model.addAttribute("listFormateur", listFormateur);
+				
+	}else {
 			List<Formateur> listFormateur = iFormateur.ListFormateur();
 			model.addAttribute("listFormateur", listFormateur);
 		}
@@ -210,7 +252,7 @@ public class ActionWeb {
 			, @RequestParam(name="inputid", defaultValue = "0") String inputid) throws Exception {
 		
 		model.addAttribute("showlabel", "true");
-		model.addAttribute("idaction", inputid);
+		model.addAttribute("idaction", Integer.parseInt(inputid));
 		model.addAttribute("addactionpage", "true");
 		
 		if( !inputcnrps2.equals("0") &&  !inputid.equals("0")) {
@@ -375,7 +417,7 @@ public class ActionWeb {
 				model.addAttribute("requetpour", "  Fonction  ");
 				
 			}else if(cnrpse.equals("0") && nome.equals("0") && directione.equals("0") && fonctione.equals("0") && !gradee.equals("0")) {
-				Set<Action> listeActions = iemploye.GetListActionByEmployeGrade(Long.parseLong(gradee));
+				Set<Action> listeActions = iemploye.GetListActionByEmployeGrade(6);
 				model.addAttribute("listeActions", listeActions);
 				model.addAttribute("requetpour", " grade : ");
 			}

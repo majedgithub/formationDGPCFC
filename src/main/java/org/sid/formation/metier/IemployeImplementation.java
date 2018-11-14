@@ -99,13 +99,13 @@ public class IemployeImplementation  implements IemployeCTRL{
 	@Override
 	public Set<Action> GetListActionByEmployeFonction(long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return emp.GetListActionByEmployeFonction(id);
 	}
 
 	@Override
 	public Set<Action> GetListActionByEmployeGrade(long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return emp.GetListActionByEmployeGrade(id);
 	}
 
 }
